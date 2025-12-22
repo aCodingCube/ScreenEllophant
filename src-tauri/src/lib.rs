@@ -1,5 +1,9 @@
 use tauri::{App, AppHandle, Emitter, WebviewUrl, WebviewWindowBuilder};
 
+mod dataStream;
+use crate::dataStream::set_save_path;
+use crate::dataStream::SaveFile;
+
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 async fn open_window(app: AppHandle) {
@@ -27,14 +31,13 @@ async fn open_window(app: AppHandle) {
 }
 
 #[tauri::command]
-async fn open_main_window(app: AppHandle)
-{
+async fn open_main_window(app: AppHandle) {
     let monitors = app.available_monitors().unwrap();
     let target_monitor = monitors.get(0).unwrap();
     let monitor_pos = target_monitor.position();
 
     //* create Main-Window for presentation control */
-    let window = WebviewWindowBuilder::new(&app,"main",WebviewUrl::App("MainWindow/".into()))
+    let window = WebviewWindowBuilder::new(&app, "main", WebviewUrl::App("MainWindow/".into()))
         .title("EProjections")
         .position(monitor_pos.x as f64, monitor_pos.y as f64)
         .inner_size(600.0, 400.0) // !Nach dem Testen wieder entfernen!
@@ -51,7 +54,14 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_window,open_main_window])
+        .manage(SaveFile { 
+            file_path: std::sync::OnceLock::new() 
+        })
+        .invoke_handler(tauri::generate_handler![
+            open_window,
+            open_main_window,
+            set_save_path
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
