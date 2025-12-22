@@ -1,9 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+      default-src 'self'; 
+      connect-src 'self' ipc.localhost http://ipc.localhost; 
+      img-src 'self' asset: https://asset.localhost http://asset.localhost; 
+      style-src 'self' 'unsafe-inline';
+      script-src 'self' 'unsafe-inline';"
+    />
     <title>Tauri App</title>
     <script type="module" src="/main.js" defer></script>
   </head>
@@ -12,28 +21,13 @@
     <main class="container">
       <h1>Welcome to Tauri</h1>
 
-      <div class="row">
-        <a href="https://tauri.app" target="_blank">
-          <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-        </a>
-        <a
-          href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"
-          target="_blank"
-        >
-          <img
-            src="/assets/javascript.svg"
-            class="logo vanilla"
-            alt="JavaScript logo"
-          />
-        </a>
-      </div>
-      <p>Click on the Tauri logo to learn more about the framework</p>
-
       <form class="row" id="greet-form">
         <input id="greet-input" placeholder="Enter a name..." />
         <button type="submit">Greet</button>
       </form>
       <p id="greet-msg"></p>
+
+      <button id="imgBtn">Show image</button>
     </main>
   </body>
 </html>

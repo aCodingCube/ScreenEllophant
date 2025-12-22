@@ -1,13 +1,22 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "description": "Capability for the main window",
-  "windows": ["main","second-window"],
+  "windows": ["main", "second-window"],
   "permissions": [
     "core:default",
-    "opener:default",
-    "core:window:allow-create",
+    "core:event:allow-emit",
+    "core:event:allow-listen",
+    "core:window:allow-available-monitors",
     "core:window:allow-close",
-    "core:webview:allow-webview-close"
+    "dialog:default",
+    "fs:default",
+    {
+      "identifier": "fs:allow-read",
+      "allow": [{ "path": "**" }]
+    },
+    {
+      "identifier": "fs:allow-write",
+      "allow": [{ "path": "**" }]
+    }
   ]
 }
