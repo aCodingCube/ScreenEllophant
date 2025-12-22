@@ -3,11 +3,25 @@ const { listen } = window.__TAURI__.event;
 
 const appWindow = getCurrentWebviewWindow();
 
-listen("new_image", (event) => {
-  const url = event.payload.url;
+listen("new_media", (event) => {
+  const { url, isVideo } = event.payload;
 
   const imageElement = document.getElementById("presentationImage");
-  imageElement.src = url;
+  const videoElement = document.getElementById("presentationVideo");
+
+  if (isVideo) {
+    console.log("Displaying video!");
+    imageElement.style.display = "none";
+    videoElement.style.display = "block";
+    videoElement.src = url;
+    videoElement.play();
+  } else {
+    console.log("Displaying image!");
+    videoElement.style.display = "none";
+    videoElement.pause();
+    imageElement.style.display = "block";
+    imageElement.src = url;
+  }
 });
 
 window.addEventListener("DOMContentLoaded", add_eventListener);

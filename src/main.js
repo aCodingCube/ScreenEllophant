@@ -1,7 +1,7 @@
 const { invoke } = window.__TAURI__.core;
 const { convertFileSrc } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
-const { emit }= window.__TAURI__.event;
+const { emit } = window.__TAURI__.event;
 
 let greetInputEl;
 let greetMsgEl;
@@ -15,14 +15,23 @@ async function choose_file() {
   // choose files
   const selected = await open({
     multiple: false,
-    filters: [{name: "Images", extensions: ["png", "jpg", "jpeg"] }],
+    filters: [
+      {
+        name: "Media",
+        extensions: ["png", "jpg", "jpeg", "mp4", "webm", "ogg"],
+      },
+    ],
   });
 
   if (selected) {
-    const imgUrl = convertFileSrc(selected);
+    const assetUrl = convertFileSrc(selected);
 
-    await emit("new_image", { url: imgUrl });
-    console.log("Send new image: " + imgUrl);
+    const isVideo =
+      selected.toLowerCase().endsWith("mp4") ||
+      selected.toLowerCase().endsWith("webm");
+
+    await emit("new_media", { url: assetUrl, isVideo: isVideo });
+    console.log("Send new media: " + assetUrl);
   }
 }
 
