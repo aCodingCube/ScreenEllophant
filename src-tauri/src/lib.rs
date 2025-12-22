@@ -2,11 +2,6 @@ use tauri::{App, AppHandle, Emitter, WebviewUrl, WebviewWindowBuilder};
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
-fn greet(name: &str) -> String {
-    format!("Hello, {}! You've been greeted from Rust!", name)
-}
-
-#[tauri::command]
 async fn open_window(app: AppHandle) {
     //* search through all monitors available */
     let monitors = app.available_monitors().unwrap();
@@ -37,7 +32,7 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![greet, open_window])
+        .invoke_handler(tauri::generate_handler![open_window])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
