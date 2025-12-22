@@ -8,18 +8,31 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 async fn open_window(app: AppHandle) {
+
+    //* search through all monitors available */
+    let monitors = app.available_monitors().unwrap();
+    let target_monitor = monitors.get(1).unwrap_or(&monitors[0]);
+    let monitor_pos = target_monitor.position();
+
+
+    //* create second Monitor for presentation */
     let window = WebviewWindowBuilder::new(
         &app,
         "second-window",
         WebviewUrl::App("SecWindow/".into())
     )
     .title("second Window")
+    .position(monitor_pos.x as f64, monitor_pos.y as f64)
     .fullscreen(true)
     .always_on_top(true)
+    .decorations(false)
+    .skip_taskbar(true)
     .build()
     .unwrap();
 
-    window.set_focus().unwrap();
+    window.set_cursor_visible(false).unwrap();
+    //window.set_focus().unwrap();
+    window.set_always_on_top(true).unwrap();
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
