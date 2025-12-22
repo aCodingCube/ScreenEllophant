@@ -10,17 +10,20 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "eprojections",
+        "label": "startingWindow",
+        "title": "Starting-Dialog",
+        "visible": true,
         "width": 800,
-        "height": 600
+        "height": 600,
+        "url": "StartingWindow/index.html"
       }
     ],
     "security": {
       "csp": null,
       "assetProtocol": {
-      "enable": true,
-      "scope": ["**"]
-    }
+        "enable": true,
+        "scope": ["**"]
+      }
     }
   },
   "bundle": {

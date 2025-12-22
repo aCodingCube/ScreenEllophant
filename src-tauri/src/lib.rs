@@ -11,7 +11,7 @@ async fn open_window(app: AppHandle) {
     //* create second Monitor for presentation */
     let window =
         WebviewWindowBuilder::new(&app, "second-window", WebviewUrl::App("SecWindow/".into()))
-            .title("second Window")
+            .title("presentation-screen")
             .position(monitor_pos.x as f64, monitor_pos.y as f64)
             .inner_size(600.0, 400.0) // !Nach dem Testen wieder entfernen!
             .fullscreen(false) // !Fullscreen nach dem Testen wieder aktivieren!
