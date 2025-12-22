@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Starting-Dialog</title>
-</head>
-<body>
-  <h1>Start Menu</h1>
-</body>
+  <head>
+    <!-- Linking CSS and JS -->
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="script.js" defer></script>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+        default-src 'self'; 
+        connect-src 'self' ipc.localhost http://ipc.localhost; 
+        img-src 'self' asset: https://asset.localhost http://asset.localhost; 
+        media-src 'self' asset: https://asset.localhost http://asset.localhost; 
+        style-src 'self' 'unsafe-inline';
+        script-src 'self' 'unsafe-inline';"
+    />
+    <title>Starting-Dialog</title>
+  </head>
+  
+  <body>
+    <h1>Start Menu</h1>
+    <button id="startBtn">Start App</button>
+  </body>
 </html>

@@ -10,7 +10,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "label": "startingWindow",
+        "label": "starting-window",
         "title": "Starting-Dialog",
         "visible": true,
         "width": 800,

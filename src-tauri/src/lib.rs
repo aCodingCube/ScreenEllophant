@@ -26,13 +26,32 @@ async fn open_window(app: AppHandle) {
     window.set_always_on_top(true).unwrap();
 }
 
+#[tauri::command]
+async fn open_main_window(app: AppHandle)
+{
+    let monitors = app.available_monitors().unwrap();
+    let target_monitor = monitors.get(0).unwrap();
+    let monitor_pos = target_monitor.position();
+
+    //* create Main-Window for presentation control */
+    let window = WebviewWindowBuilder::new(&app,"main",WebviewUrl::App("MainWindow/".into()))
+        .title("EProjections")
+        .position(monitor_pos.x as f64, monitor_pos.y as f64)
+        .inner_size(600.0, 400.0) // !Nach dem Testen wieder entfernen!
+        .fullscreen(false) // !Fullscreen nach dem Testen wieder aktivieren!
+        .build()
+        .unwrap();
+
+    let _ = window.set_focus();
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![open_window])
+        .invoke_handler(tauri::generate_handler![open_window,open_main_window])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

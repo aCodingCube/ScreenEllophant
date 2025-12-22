@@ -1,7 +1,7 @@
 {
   "$schema": "../gen/schemas/desktop-schema.json",
   "identifier": "default",
-  "windows": ["main", "second-window"],
+  "windows": ["main", "second-window","starting-window"],
   "permissions": [
     "core:default",
     "core:event:allow-emit",
