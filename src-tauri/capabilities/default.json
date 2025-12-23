@@ -4,6 +4,7 @@
   "windows": ["main", "second-window","starting-window"],
   "permissions": [
     "core:default",
+    "core:webview:default",
     "core:event:allow-emit",
     "core:event:allow-listen",
     "core:window:allow-available-monitors",

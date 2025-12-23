@@ -4,15 +4,6 @@
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="styles.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="
-      default-src 'self'; 
-      connect-src 'self' ipc.localhost http://ipc.localhost; 
-      img-src 'self' asset: https://asset.localhost http://asset.localhost; 
-      style-src 'self' 'unsafe-inline';
-      script-src 'self' 'unsafe-inline';"
-    />
     <title>Tauri App</title>
     <script type="module" src="script.js" defer></script>
   </head>
@@ -29,10 +20,12 @@
 
         <main class="bottom-area">
           <div class="box half" id="box-left">
-            <div class="grid-container" id="container"></div>
+            <div class="grid-container" id="container-left"></div>
           </div>
 
-          <div class="box half" id="box-right">UI - Right</div>
+          <div class="box half" id="box-right">
+            <div class="grid-container" id="container-right"></div>
+          </div>
         </main>
       </div>
     </main>

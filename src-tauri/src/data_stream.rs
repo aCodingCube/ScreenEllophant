@@ -74,7 +74,7 @@ pub async fn load_asset_names(state: State<'_, ProjectDir>) -> Result<Vec<String
     let project_dir = state.path.get().cloned().ok_or("Error")?;
     let mut folder_path = PathBuf::from(&project_dir);
     folder_path.push(MEDIA_FOLDER);
-    println!("folder path: {}",folder_path.display());
+    println!("folder path: {}", folder_path.display());
     let entries = fs::read_dir(&folder_path).map_err(|e: std::io::Error| e.to_string())?;
 
     // 2. iterate over entries
@@ -90,4 +90,16 @@ pub async fn load_asset_names(state: State<'_, ProjectDir>) -> Result<Vec<String
     }
 
     Ok(names)
+}
+
+#[tauri::command]
+pub async fn get_file_src(state: State<'_, ProjectDir>, file_name: &str) -> Result<String, String> {
+    let project_dir = state.path.get().cloned().ok_or("Error!")?;
+    let mut path = PathBuf::from(&project_dir);
+    path.push(MEDIA_FOLDER);
+    path.push(file_name);
+
+    let path_str = path.to_string_lossy().into_owned();
+    
+    Ok(path_str)
 }

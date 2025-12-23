@@ -1,8 +1,10 @@
+use tauri::Manager;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
 mod data_stream;
-use crate::data_stream::load_asset_names;
+use crate::data_stream::get_file_src;
 use crate::data_stream::create_new_project;
+use crate::data_stream::load_asset_names;
 use crate::data_stream::set_project_path;
 use crate::data_stream::ProjectDir;
 
@@ -34,20 +36,11 @@ async fn open_window(app: AppHandle) {
 
 #[tauri::command]
 async fn open_main_window(app: AppHandle) {
-    let monitors = app.available_monitors().unwrap();
-    let target_monitor = monitors.get(0).unwrap();
-    let monitor_pos = target_monitor.position();
+    if let Some(window) = app.get_webview_window("main") {
+        window.show().unwrap();
 
-    //* create Main-Window for presentation control */
-    let window = WebviewWindowBuilder::new(&app, "main", WebviewUrl::App("MainWindow/".into()))
-        .title("EProjections")
-        .position(monitor_pos.x as f64, monitor_pos.y as f64)
-        .inner_size(600.0, 400.0) // !Nach dem Testen wieder entfernen!
-        .fullscreen(false) // !Fullscreen nach dem Testen wieder aktivieren!
-        .build()
-        .unwrap();
-
-    let _ = window.set_focus();
+        window.set_focus().unwrap();
+    }
 }
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -64,8 +57,41 @@ pub fn run() {
             open_main_window,
             set_project_path,
             create_new_project,
-            load_asset_names
+            load_asset_names,
+            get_file_src
         ])
+        .on_window_event(|window, event| {
+            if let tauri::WindowEvent::CloseRequested { .. } = event {
+                let label = window.label();
+                let app = window.app_handle();
+
+                // 1. Wenn das Start-Fenster geschlossen wird
+                if label == "starting-window" {
+                    // Prüfe, ob das Hauptfenster existiert UND ob es sichtbar ist
+                    if let Some(main_window) = app.get_webview_window("main") {
+                        let is_visible = main_window.is_visible().unwrap_or(false);
+
+                        if !is_visible {
+                            // Falls Main noch unsichtbar ist -> App beenden
+                            println!("Main ist unsichtbar, beende App.");
+                            app.exit(0);
+                        } else {
+                            // Falls Main schon offen ist -> Nur Start-Fenster zu (Standard)
+                            println!("Main ist bereits offen, schließe nur Start-Fenster.");
+                        }
+                    } else {
+                        // Falls aus irgendeinem Grund kein Main-Fenster existiert
+                        app.exit(0);
+                    }
+                }
+
+                // 2. Wenn das Haupt-Fenster geschlossen wird
+                if label == "main" {
+                    // Wenn der User das Hauptfenster schließt, soll immer alles zu gehen
+                    app.exit(0);
+                }
+            }
+        })
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
