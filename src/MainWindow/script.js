@@ -3,37 +3,13 @@ const { convertFileSrc } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
 const { emit } = window.__TAURI__.event;
 
-async function choose_file() {
-  // choose files
-  const selected = await open({
-    multiple: false,
-    filters: [
-      {
-        name: "Media",
-        extensions: ["png", "jpg", "jpeg", "mp4", "webm", "ogg"],
-      },
-    ],
-  });
-
-  if (selected) {
-    const assetUrl = convertFileSrc(selected);
-
-    const isVideo =
-      selected.toLowerCase().endsWith("mp4") ||
-      selected.toLowerCase().endsWith("webm");
-
-    await emit("new_media", { url: assetUrl, isVideo: isVideo });
-    console.log("Send new media: " + assetUrl);
-  }
-}
-
 async function sendMedia(path) {
   const isVideo =
     path.toLowerCase().endsWith("mp4") || path.toLowerCase().endsWith("webm");
 
   const assetUrl = convertFileSrc(path);
-  await emit("new_media", { url: assetUrl, isVideo: isVideo });
-  console.log("Send new media: " + assetUrl);
+  await emit("preload_media", { url: assetUrl, isVideo: isVideo });
+  console.log("preload_media: " + assetUrl);
 }
 
 async function addAssetsToGridDisplay(name) {
@@ -60,7 +36,6 @@ async function addAssetsToGridAction(name) {
   div.className = "grid-box";
 
   div.addEventListener("click", (event) => {
-    console.log("Click!");
     handleMediaClick(event, name);
   });
 
@@ -92,12 +67,17 @@ async function handleMediaClick(event, name) {
     markPlaying(element);
 
     let path = await invoke("get_file_src", { fileName: name });
-    console.log("sendMedia(" + path + ")");
-    await sendMedia(path);
+    console.log("trigger_swap, name: " + name);
+    await emit("trigger_swap");
   } else {
+    if(element.classList.contains("playing"))
+    {
+      return;
+    }
     document.querySelectorAll('.selected').forEach(element => deselectMedia(element));
     selectMedia(element);
-    //* preload media
+    let path = await invoke("get_file_src", { fileName: name });
+    await sendMedia(path);
   }
 }
 
@@ -125,10 +105,6 @@ function unmarkPlaying(element) {
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("launchBtn").addEventListener("click", (e) => {
     open_window();
-  });
-
-  document.getElementById("imgBtn").addEventListener("click", (e) => {
-    choose_file();
   });
 
   document.getElementById("loadBtn").addEventListener("click", async () => {
