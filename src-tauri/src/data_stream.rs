@@ -1,7 +1,8 @@
-use std::{fmt::format, path::PathBuf, sync::OnceLock};
+use std::{fmt::format, fs::File, io, path::PathBuf, sync::OnceLock, fs};
 use tauri::State;
 
 pub const SAVE_FILE: &str = "saveFile.json";
+pub const MEDIA_FOLDER: &str = "Media";
 
 pub struct Media {
     url: String,
@@ -39,6 +40,23 @@ pub async fn set_project_path(state: State<'_,ProjectDir>, new_path: String) -> 
 
 pub async fn get_project_path(state: State<'_,ProjectDir>) -> Option<String> {
     state.path.get().cloned()
+}
+
+#[tauri::command]
+pub async fn create_new_project(state: State<'_,ProjectDir>, new_path: String) -> Result<(), String> {
+
+    let mut base = PathBuf::from(&new_path);
+    let mut file_path = base.clone(); // for file path
+
+    // 1. create project and media dir
+    base.push(MEDIA_FOLDER);
+    fs::create_dir_all(&base).map_err(|e: std::io::Error| e.to_string())?; // create project and media dir
+
+    // 2. create json file
+    file_path.push(SAVE_FILE);
+    fs::write(&file_path,"{}").map_err(|e: std::io::Error| e.to_string())?;
+
+    Ok(())
 }
 
 // layout ist ein Array mit vielen "MediaElemen"-Elementen,

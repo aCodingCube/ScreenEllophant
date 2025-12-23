@@ -1,6 +1,7 @@
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
 mod data_stream;
+use crate::data_stream::create_new_project;
 use crate::data_stream::set_project_path;
 use crate::data_stream::ProjectDir;
 
@@ -60,7 +61,8 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             open_window,
             open_main_window,
-            set_project_path
+            set_project_path,
+            create_new_project
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
