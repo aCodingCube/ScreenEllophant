@@ -59,10 +59,9 @@ async function addAssetsToGridAction(name) {
   const div = document.createElement("div");
   div.className = "grid-box";
 
-  div.addEventListener("dblclick", async () => {
-    let path = await invoke("get_file_src", { fileName: name });
-    console.log("sendMedia(" + path + ")");
-    await sendMedia(path);
+  div.addEventListener("click", (event) => {
+    console.log("Click!");
+    handleMediaClick(event, name);
   });
 
   const p = document.createElement("p");
@@ -82,6 +81,47 @@ async function open_window() {
   await invoke("open_window");
 }
 
+//* Selection and Preloading
+
+async function handleMediaClick(event, name) {
+  const element = event.currentTarget;
+
+  if (element.classList.contains("selected")) {
+    deselectMedia(element);
+    document.querySelectorAll('.playing').forEach(element => unmarkPlaying(element));
+    markPlaying(element);
+
+    let path = await invoke("get_file_src", { fileName: name });
+    console.log("sendMedia(" + path + ")");
+    await sendMedia(path);
+  } else {
+    document.querySelectorAll('.selected').forEach(element => deselectMedia(element));
+    selectMedia(element);
+    //* preload media
+  }
+}
+
+function selectMedia(element) {
+  element.classList.add("selected");
+  element.style.backgroundColor = "#34dbbfff";
+}
+
+function deselectMedia(element) {
+  element.classList.remove("selected");
+  element.style.backgroundColor = "#3498db";
+}
+
+function markPlaying(element) {
+  element.classList.add("playing");
+  element.style.backgroundColor = "#9534dbff";
+}
+
+function unmarkPlaying(element) {
+  element.classList.remove("playing");
+  element.style.backgroundColor = "#3498db";
+}
+
+//* Event-Listener
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("launchBtn").addEventListener("click", (e) => {
     open_window();
@@ -92,6 +132,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("loadBtn").addEventListener("click", async () => {
+    document.getElementById("container-left").replaceChildren();
     const result = await load_asset_names();
 
     result.forEach((name) => {
