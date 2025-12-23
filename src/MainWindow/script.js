@@ -27,6 +27,25 @@ async function choose_file() {
   }
 }
 
+async function addAssetsToGrid(name)
+{
+  const container = document.getElementById("container");
+  const div = document.createElement("div");
+  div.className = "grid-box";
+
+  const p = document.createElement("p");
+  p.innerText = name;
+
+  div.appendChild(p);
+  container.appendChild(div);
+}
+
+async function load_asset_names() {
+  const result = await invoke("load_asset_names");
+  console.log("Load assets: {}",result);
+  return result;
+}
+
 async function open_window() {
   await invoke("open_window");
 }
@@ -39,5 +58,13 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("imgBtn").addEventListener("click", (e) => {
     choose_file();
+  });
+
+  document.getElementById("loadBtn").addEventListener("click",async()=>{
+    const result = await load_asset_names();
+
+    result.forEach(name => {
+      addAssetsToGrid(name);
+    });
   });
 });

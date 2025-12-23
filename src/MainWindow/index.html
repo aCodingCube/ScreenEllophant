@@ -19,11 +19,22 @@
 
   <body>
     <main class="container">
-      <h1>UI-MediaInterface</h1>
+      <div class="layout-container">
+        <header class="top-box">
+          <h1>UI-MediaInterface</h1>
+          <button id="launchBtn">Launch Player</button>
+          <button id="imgBtn">Choose media</button>
+          <button id="loadBtn">Load Assets</button>
+        </header>
 
-      <button id="launchBtn">Launch Player</button>
+        <main class="bottom-area">
+          <div class="box half" id="box-left">
+            <div class="grid-container" id="container"></div>
+          </div>
 
-      <button id="imgBtn">Choose media</button>
+          <div class="box half" id="box-right">UI - Right</div>
+        </main>
+      </div>
     </main>
   </body>
 </html>
