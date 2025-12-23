@@ -19,7 +19,7 @@ async function addAssetsToGridDisplay(name) {
   div.draggable = true;
 
   div.addEventListener("dragstart", (e) => {
-    e.dataTransfer.setData("text", name);
+    e.dataTransfer.setData("application/x-screen-monkey", name);
     e.dataTransfer.effectAllowed = "copy";
   });
 
@@ -63,18 +63,21 @@ async function handleMediaClick(event, name) {
 
   if (element.classList.contains("selected")) {
     deselectMedia(element);
-    document.querySelectorAll('.playing').forEach(element => unmarkPlaying(element));
+    document
+      .querySelectorAll(".playing")
+      .forEach((element) => unmarkPlaying(element));
     markPlaying(element);
 
     let path = await invoke("get_file_src", { fileName: name });
     console.log("trigger_swap, name: " + name);
     await emit("trigger_swap");
   } else {
-    if(element.classList.contains("playing"))
-    {
+    if (element.classList.contains("playing")) {
       return;
     }
-    document.querySelectorAll('.selected').forEach(element => deselectMedia(element));
+    document
+      .querySelectorAll(".selected")
+      .forEach((element) => deselectMedia(element));
     selectMedia(element);
     let path = await invoke("get_file_src", { fileName: name });
     await sendMedia(path);
@@ -124,7 +127,11 @@ window.addEventListener("DOMContentLoaded", () => {
 
   rightContainer.addEventListener("drop", (event) => {
     event.preventDefault();
-    const name = event.dataTransfer.getData("text");
+    const name = event.dataTransfer.getData("application/x-screen-monkey");
+    if (!name || name.trim() === "") {
+      console.log("Ungültiger Drop-Inhalt ignoriert.");
+      return;
+    }
     console.log("Retrieved: " + name);
     addAssetsToGridAction(name);
   });
