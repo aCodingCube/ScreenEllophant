@@ -1,8 +1,8 @@
-use tauri::{App, AppHandle, Emitter, WebviewUrl, WebviewWindowBuilder};
+use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
-mod dataStream;
-use crate::dataStream::set_save_path;
-use crate::dataStream::SaveFile;
+mod data_stream;
+use crate::data_stream::set_project_path;
+use crate::data_stream::ProjectDir;
 
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
@@ -54,13 +54,13 @@ pub fn run() {
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_opener::init())
-        .manage(SaveFile { 
-            file_path: std::sync::OnceLock::new() 
+        .manage(ProjectDir {
+            path: std::sync::OnceLock::new(),
         })
         .invoke_handler(tauri::generate_handler![
             open_window,
             open_main_window,
-            set_save_path
+            set_project_path
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

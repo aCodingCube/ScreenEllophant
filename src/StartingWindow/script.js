@@ -3,7 +3,6 @@ const { invoke } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
 
 const appWindow = getCurrentWebviewWindow();
-let saveFilePath;
 
 async function open_main_window(params) {
   await invoke("open_main_window");
@@ -11,35 +10,35 @@ async function open_main_window(params) {
   await appWindow.close();
 }
 
-async function chooseFile() {
+async function chooseFolder() {
   const selected = await open({
     multiple: false,
-    filters: [
-      {
-        name: "JSON-Datei",
-        extensions: ["json"],
-      },
-    ],
+    directory: true,
   });
 
   return selected;
 }
 
-async function set_save_path(filePath) {
-  await invoke("set_save_path", { newPath: filePath });
+async function set_project_path(path) {
+  try {
+    let result = await invoke("set_project_path", { newPath: path });
+  } catch (e) {
+    alert("Fehler: " + e);
+    return;
+  }
+
+  await open_main_window();
 }
 
 window.addEventListener("DOMContentLoaded", () => {
   // document.getElementById("startBtn").addEventListener("click", () => {
   //   open_main_window();
   // });
-  document.getElementById("fileBtn").addEventListener("click", async () => {
-    console.log("pressed file Btn");
-    const result = await chooseFile();
-    if(result)
-    {
-      await set_save_path(result);
-      await open_main_window();
+  document.getElementById("folderBtn").addEventListener("click", async () => {
+    console.log("pressed folder Btn");
+    const result = await chooseFolder();
+    if (result) {
+      await set_project_path(result);
     }
   });
 });
