@@ -67,9 +67,6 @@ async function handleMediaClick(event, name) {
       .querySelectorAll(".playing")
       .forEach((element) => unmarkPlaying(element));
     markPlaying(element);
-
-    let path = await invoke("get_file_src", { fileName: name });
-    console.log("trigger_swap, name: " + name);
     await emit("trigger_swap");
   } else {
     if (element.classList.contains("playing")) {

@@ -3,6 +3,7 @@ const { listen } = window.__TAURI__.event;
 
 const appWindow = getCurrentWebviewWindow();
 const cue = {};
+let cueIsValid = false;
 let isSwapping = false;
 let triedLoading = false;
 
@@ -11,6 +12,7 @@ listen("preload_media", (event) => {
   if (isSwapping) {
     cue[0] = event.payload.url;
     cue[1] = event.payload.isVideo;
+    cueIsValid = true;
     return;
   }
   // else
@@ -41,6 +43,7 @@ function preloadCue() {
   const url = cue[0];
   console.log("Called back to " + url);
   const isVideo = cue[1];
+  cueIsValid = false;
 
   if (isVideo) {
     const video = document.createElement("video");
@@ -104,7 +107,9 @@ function triggerSwap() {
       console.log("Finished transition!");
       oldSlot.innerHTML = "";
       isSwapping = false;
-      preloadCue();
+      if (cueIsValid) {
+        preloadCue();
+      }
     },
     { once: true }
   );
