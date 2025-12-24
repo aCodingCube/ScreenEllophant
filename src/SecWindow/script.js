@@ -123,8 +123,6 @@ function checkAndSwap() {
   }
 }
 
-
-
 window.addEventListener("DOMContentLoaded", add_eventListener);
 
 function add_eventListener() {
