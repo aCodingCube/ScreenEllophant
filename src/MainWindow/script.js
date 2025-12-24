@@ -12,6 +12,8 @@ import {
   handleMediaClick,
 } from "./ui_grid_logic.js";
 
+import { addGridTemplates } from "./ui_action_grid.js";
+
 // add assets to left "display" grid
 async function addAssetsToGridDisplay(name) {
   const container = document.getElementById("container-left");
@@ -21,24 +23,8 @@ async function addAssetsToGridDisplay(name) {
 
   div.addEventListener("dragstart", (e) => {
     e.dataTransfer.setData("application/x-screen-monkey", name);
+    e.dataTransfer.setData("application/src-screen-monkey",name);
     e.dataTransfer.effectAllowed = "copy";
-  });
-
-  const p = document.createElement("p");
-  p.innerText = name;
-
-  div.appendChild(p);
-  container.appendChild(div);
-}
-
-// add assets to right "action" grid
-async function addAssetsToGridAction(name) {
-  const container = document.getElementById("container-right");
-  const div = document.createElement("div");
-  div.className = "grid-box";
-
-  div.addEventListener("click", (event) => {
-    handleMediaClick(event, name);
   });
 
   const p = document.createElement("p");
@@ -64,19 +50,9 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // drops
-  const rightContainer = document.getElementById("container-right");
-
-  rightContainer.addEventListener("dragover", (event) => {
-    event.preventDefault();
+  document.getElementById("templateBtn").addEventListener("click", () => {
+    addGridTemplates(5);
   });
 
-  rightContainer.addEventListener("drop", (event) => {
-    event.preventDefault();
-    const name = event.dataTransfer.getData("application/x-screen-monkey");
-    if (!name || name.trim() === "") {
-      return;
-    }
-    addAssetsToGridAction(name);
-  });
+  addGridTemplates(10);
 });
