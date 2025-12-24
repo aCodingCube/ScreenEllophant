@@ -14,6 +14,8 @@ import {
 
 import { addGridTemplates } from "./ui_action_grid.js";
 
+export let editToggle = false;
+
 // add assets to left "display" grid
 async function addAssetsToGridDisplay(name) {
   const container = document.getElementById("container-left");
@@ -54,5 +56,12 @@ window.addEventListener("DOMContentLoaded", () => {
     addGridTemplates(5);
   });
 
+  document.getElementById("editToggle").addEventListener("click",(event) => {
+    editToggle = editToggle ? false : true;
+    let color = event.currentTarget.style.backgroundColor;
+    event.currentTarget.style.backgroundColor = color == "red" ? "green" : "red";
+  });
+
+  document.getElementById("editToggle").style.backgroundColor = "red";
   addGridTemplates(10);
 });

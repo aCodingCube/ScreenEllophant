@@ -9,7 +9,6 @@ export async function sendMedia(path) {
 
   const assetUrl = convertFileSrc(path);
   await emit("preload_media", { url: assetUrl, isVideo: isVideo });
-  console.log("preload_media: " + assetUrl);
 }
 
 export function selectMedia(element) {
