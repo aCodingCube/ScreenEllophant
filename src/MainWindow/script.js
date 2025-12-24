@@ -3,15 +3,16 @@ const { convertFileSrc } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
 const { emit } = window.__TAURI__.event;
 
-async function sendMedia(path) {
-  const isVideo =
-    path.toLowerCase().endsWith("mp4") || path.toLowerCase().endsWith("webm");
+import {
+  sendMedia,
+  selectMedia,
+  deselectMedia,
+  markPlaying,
+  unmarkPlaying,
+  handleMediaClick,
+} from "./ui_grid_logic.js";
 
-  const assetUrl = convertFileSrc(path);
-  await emit("preload_media", { url: assetUrl, isVideo: isVideo });
-  console.log("preload_media: " + assetUrl);
-}
-
+// add assets to left "display" grid
 async function addAssetsToGridDisplay(name) {
   const container = document.getElementById("container-left");
   const div = document.createElement("div");
@@ -30,6 +31,7 @@ async function addAssetsToGridDisplay(name) {
   container.appendChild(div);
 }
 
+// add assets to right "action" grid
 async function addAssetsToGridAction(name) {
   const container = document.getElementById("container-right");
   const div = document.createElement("div");
@@ -46,76 +48,23 @@ async function addAssetsToGridAction(name) {
   container.appendChild(div);
 }
 
-async function load_asset_names() {
-  const result = await invoke("load_asset_names");
-  console.log("Load assets: {}", result);
-  return result;
-}
-
-async function open_window() {
-  await invoke("open_window");
-}
-
-//* Selection and Preloading
-
-async function handleMediaClick(event, name) {
-  const element = event.currentTarget;
-
-  if (element.classList.contains("selected")) {
-    deselectMedia(element);
-    document
-      .querySelectorAll(".playing")
-      .forEach((element) => unmarkPlaying(element));
-    markPlaying(element);
-    await emit("trigger_swap");
-  } else {
-    if (element.classList.contains("playing")) {
-      return;
-    }
-    document
-      .querySelectorAll(".selected")
-      .forEach((element) => deselectMedia(element));
-    selectMedia(element);
-    let path = await invoke("get_file_src", { fileName: name });
-    await sendMedia(path);
-  }
-}
-
-function selectMedia(element) {
-  element.classList.add("selected");
-  element.style.backgroundColor = "#34dbbfff";
-}
-
-function deselectMedia(element) {
-  element.classList.remove("selected");
-  element.style.backgroundColor = "#3498db";
-}
-
-function markPlaying(element) {
-  element.classList.add("playing");
-  element.style.backgroundColor = "#9534dbff";
-}
-
-function unmarkPlaying(element) {
-  element.classList.remove("playing");
-  element.style.backgroundColor = "#3498db";
-}
-
 //* Event-Listener
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("launchBtn").addEventListener("click", (e) => {
-    open_window();
+  document.getElementById("launchBtn").addEventListener("click", async (e) => {
+    await invoke("open_window");
   });
 
+  // load assets
   document.getElementById("loadBtn").addEventListener("click", async () => {
     document.getElementById("container-left").replaceChildren();
-    const result = await load_asset_names();
+    const result = await invoke("load_asset_names");
 
     result.forEach((name) => {
       addAssetsToGridDisplay(name);
     });
   });
 
+  // drops
   const rightContainer = document.getElementById("container-right");
 
   rightContainer.addEventListener("dragover", (event) => {
@@ -126,10 +75,8 @@ window.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     const name = event.dataTransfer.getData("application/x-screen-monkey");
     if (!name || name.trim() === "") {
-      console.log("Ungültiger Drop-Inhalt ignoriert.");
       return;
     }
-    console.log("Retrieved: " + name);
     addAssetsToGridAction(name);
   });
 });
