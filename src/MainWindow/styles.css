@@ -13,7 +13,7 @@ html {
 
 .top-box {
   height: 10%;
-  background-color: blue;
+  background-color: rgb(69, 69, 69);
   color: white;
   display: flex;
   align-items: center;
@@ -31,17 +31,20 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ddd;
+  border: 1px solid rgb(108, 108, 108);
   flex: 1;
 }
-
+/* left */
 .box:nth-child(1) {
-  background-color: green;
+  background-color: #181818;
   color: white;
+  flex: 3;
 }
+/* right */
 .box:nth-child(2) {
-  background-color: red;
+  background-color: #181818;
   color: white;
+  flex: 7;
 }
 
 .grid-container {
@@ -70,7 +73,7 @@ html {
   aspect-ratio: 1 / 1;
   grid-column: span 2;
 
-  background-color: #3498db;
+  background-color: #4e2232;
   color: white;
   display: flex;
   align-items: center;
@@ -96,7 +99,7 @@ html {
 
 .grid-box-content {
   aspect-ratio: 1 / 1;
-  background-color: #3498db;
+  background-color: #193639;
   color: white;
   display: flex;
   align-items: center;
@@ -130,7 +133,7 @@ html {
   /* Keine Grid-Regeln mehr! */
   flex: 1; /* Nimmt 1 Teil des Platzes */
   height: auto;
-  background-color: #2dd117;
+  background-color: #40341c;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -153,7 +156,7 @@ html {
   /* Keine Grid-Regeln mehr! */
   flex: 2; /* Nimmt 2 Teile des Platzes (doppelt so breit wie grün) */
   aspect-ratio: 1 / 1; /* Erzeugt die quadratische Höhe */
-  background-color: #bb77df;
+  background-color: #272727;
   border-radius: 8px;
   display: flex;
   align-items: center;
