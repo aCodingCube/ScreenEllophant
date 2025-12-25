@@ -16,6 +16,8 @@ import {
   addGridTemplates,
   addMoveTemplate,
   removeMoveTemplate,
+  addGhostMoveTemplate,
+  removeGhostMoveTemplate,
 } from "./ui_action_grid.js";
 
 export let editToggle = false;
@@ -38,8 +40,9 @@ async function addAssetsToGridDisplay(name) {
   });
 
   div.addEventListener("dragend", () => {
-    removeMoveTemplate();
-    addMoveTemplate();
+    if (editToggle) {
+      removeMoveTemplate();
+    }
   });
 
   const p = document.createElement("p");
@@ -66,7 +69,12 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("templateBtn").addEventListener("click", () => {
+    if(!editToggle)
+    {
+      return;
+    }
     addGridTemplates(5);
+    addGhostMoveTemplate();
   });
 
   document.getElementById("editToggle").addEventListener("click", (event) => {
@@ -77,10 +85,12 @@ window.addEventListener("DOMContentLoaded", () => {
     } else {
       editToggle = true;
       event.currentTarget.style.backgroundColor = "green";
-      addMoveTemplate();
+      //addMoveTemplate();
+      //removeGhostMoveTemplate();
     }
   });
 
   document.getElementById("editToggle").style.backgroundColor = "red";
   addGridTemplates(10);
+  addGhostMoveTemplate();
 });

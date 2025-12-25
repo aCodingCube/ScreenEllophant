@@ -114,35 +114,48 @@ html {
   height: 100%;
 }
 
-.template-grid-box {
-  grid-column: span 2;
-  aspect-ratio: 1 / 1;
-  background-color: #bb77df; /* Das Grün */
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; /* Beschneidet das blaue Child an den Ecken */
+.grid-box-parent {
+  grid-column: span 3; /* WICHTIG: Er nimmt 3 Grid-Zellen ein */
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  display: flex !important; /* Erzwingt Flex-Modus */
+  flex-direction: row !important; /* Erzwingt Nebeneinander */
+  align-items: stretch;
+  gap: 15px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .move-template {
-  grid-column: span 1;
-  width: 100%;
-  aspect-ratio: 1 / 2;
-  background-color: #2dd117; /* Das Grün */
+  min-width: 0;
+  /* Keine Grid-Regeln mehr! */
+  flex: 1; /* Nimmt 1 Teil des Platzes */
+  height: auto;
+  background-color: #2dd117;
   border-radius: 8px;
   display: flex;
   align-items: center;
-  overflow: hidden; /* Beschneidet das blaue Child an den Ecken */
+  justify-content: center;
+}
 
+.ghost-move-template {
+  min-width: 0;
+  flex: 1; /* Nimmt 1 Teil des Platzes */
+  height: auto;
+  background-color: transparent;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  justify-self: stretch;  
-  flex-direction: column;
+}
+
+.template-grid-box {
+  min-width: 0;
+  /* Keine Grid-Regeln mehr! */
+  flex: 2; /* Nimmt 2 Teile des Platzes (doppelt so breit wie grün) */
+  aspect-ratio: 1 / 1; /* Erzeugt die quadratische Höhe */
+  background-color: #bb77df;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

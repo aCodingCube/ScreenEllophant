@@ -33,7 +33,6 @@ function addAssetsToTemplate(assetName, assetSrc, element) {
 
   div.addEventListener("dragend", () => {
     removeMoveTemplate();
-    addMoveTemplate();
   });
 
   const p = document.createElement("p");
@@ -52,12 +51,27 @@ export function addGridTemplates(n) {
       return;
     }
     numberOfTemplates += 1;
+    const parent = document.createElement("div");
+    parent.className = "grid-box-parent";
+
     const element = document.createElement("div");
     element.className = "template-grid-box";
+
     let id = "template-" + numberOfTemplates;
     element.id = id;
+    parent.id = "parent-" + id;
+
     element.empty = true;
     layout.push(id);
+
+    element.addEventListener("dragstart",()=>{
+      removeMoveTemplate();
+      addMoveTemplate();
+    });
+
+    element.addEventListener("dragend",()=>{
+      removeMoveTemplate();
+    })
 
     element.addEventListener("dragover", (event) => {
       if (!editToggle) {
@@ -88,22 +102,37 @@ export function addGridTemplates(n) {
 
       addAssetsToTemplate(name, src, event.currentTarget);
     });
-    container.appendChild(element);
+    parent.appendChild(element);
+    container.appendChild(parent);
   }
 }
 
-function addGridTemplateBefore(templateElement) {
+function addGridTemplateBefore(m_parent) {
   const container = document.getElementById("container-right");
+  const parent = document.createElement("div");
+  parent.className = "grid-box-parent";
   // max number of templates ignorieren!
   numberOfTemplates += 1;
   const element = document.createElement("div");
   element.className = "template-grid-box";
+
   let id = "template-" + numberOfTemplates;
   element.id = id;
+  parent.id = "parent-" + id;
+
   element.empty = false;
   layout.push(id);
 
   // standart Verhalten für drag and drop!
+
+  element.addEventListener("dragstart",()=>{
+    removeMoveTemplate();
+    addMoveTemplate();
+  })
+
+  element.addEventListener("dragend",()=>{
+    removeMoveTemplate();
+  })
 
   element.addEventListener("dragover", (event) => {
     if (!editToggle) {
@@ -134,20 +163,19 @@ function addGridTemplateBefore(templateElement) {
 
     addAssetsToTemplate(name, src, event.currentTarget);
   });
-  container.insertBefore(element, templateElement);
+  parent.appendChild(element);
+  container.insertBefore(parent, m_parent);
   return id;
 }
 
 export function addMoveTemplate() {
   for (const id of layout) {
-    const container = document.getElementById("container-right");
+    const parent = document.getElementById("parent-" + id);
     const element = document.getElementById(id);
     const moveTemplate = document.createElement("div");
     moveTemplate.className = "move-template";
     moveTemplate.innerText = "+";
     moveTemplate.id = "moveTemplate-" + id;
-
-    console.log("Add move template for id:" + id);
 
     moveTemplate.addEventListener("dragover", (event) => {
       event.preventDefault();
@@ -168,7 +196,7 @@ export function addMoveTemplate() {
         "application/src-screen-monkey"
       );
 
-      const newId = addGridTemplateBefore(element);
+      const newId = addGridTemplateBefore(parent);
       const newTemplate = document.getElementById(newId);
 
       if (targetId) {
@@ -180,17 +208,33 @@ export function addMoveTemplate() {
       addAssetsToTemplate(targetName, targetSrc, newTemplate);
 
       if (editToggle && targetId) {
-        document.getElementById("moveTemplate-" + targetId).remove();
+        document.getElementById("parent-" + targetId).remove();
       }
     });
-
-    container.insertBefore(moveTemplate, element);
+    parent.insertBefore(moveTemplate, element);
   }
+  removeGhostMoveTemplate();
 }
 
 export function removeMoveTemplate() {
+  const templates = document.querySelectorAll(".move-template");
+  templates.forEach((element)=> element.remove());
+  addGhostMoveTemplate();
+}
+
+export function addGhostMoveTemplate() {
+  removeGhostMoveTemplate();
   for (const id of layout) {
-    const moveTemplate = document.getElementById("moveTemplate-" + id);
-    moveTemplate.remove();
+    const parent = document.getElementById("parent-" + id);
+    const element = document.getElementById(id);
+    const ghost = document.createElement("div");
+    ghost.className = "ghost-move-template";
+
+    parent.insertBefore(ghost, element);
   }
+}
+
+export function removeGhostMoveTemplate() {
+  const ghosts = document.querySelectorAll(".ghost-move-template");
+  ghosts.forEach((element) => element.remove());
 }
