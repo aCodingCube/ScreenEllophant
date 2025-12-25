@@ -12,7 +12,11 @@ import {
   handleMediaClick,
 } from "./ui_grid_logic.js";
 
-import { addGridTemplates } from "./ui_action_grid.js";
+import {
+  addGridTemplates,
+  addMoveTemplate,
+  removeMoveTemplate,
+} from "./ui_action_grid.js";
 
 export let editToggle = false;
 
@@ -24,9 +28,18 @@ async function addAssetsToGridDisplay(name) {
   div.draggable = true;
 
   div.addEventListener("dragstart", (e) => {
+    if (editToggle) {
+      removeMoveTemplate();
+      addMoveTemplate();
+    }
     e.dataTransfer.setData("application/x-screen-monkey", name);
-    e.dataTransfer.setData("application/src-screen-monkey",name);
+    e.dataTransfer.setData("application/src-screen-monkey", name);
     e.dataTransfer.effectAllowed = "copy";
+  });
+
+  div.addEventListener("dragend", () => {
+    removeMoveTemplate();
+    addMoveTemplate();
   });
 
   const p = document.createElement("p");
@@ -56,10 +69,16 @@ window.addEventListener("DOMContentLoaded", () => {
     addGridTemplates(5);
   });
 
-  document.getElementById("editToggle").addEventListener("click",(event) => {
-    editToggle = editToggle ? false : true;
-    let color = event.currentTarget.style.backgroundColor;
-    event.currentTarget.style.backgroundColor = color == "red" ? "green" : "red";
+  document.getElementById("editToggle").addEventListener("click", (event) => {
+    if (editToggle) {
+      editToggle = false;
+      event.currentTarget.style.backgroundColor = "red";
+      removeMoveTemplate();
+    } else {
+      editToggle = true;
+      event.currentTarget.style.backgroundColor = "green";
+      addMoveTemplate();
+    }
   });
 
   document.getElementById("editToggle").style.backgroundColor = "red";

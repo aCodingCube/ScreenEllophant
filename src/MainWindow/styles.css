@@ -47,7 +47,7 @@ html {
 .grid-container {
   display: grid;
   /* 'auto-fill' sorgt für die Spalten, 'auto' für die Zeilenhöhe */
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
   grid-auto-rows: min-content; /* WICHTIG: Zeilen passen sich dem Inhalt an */
 
   align-content: start;
@@ -62,10 +62,13 @@ html {
   box-sizing: border-box;
   flex: 1;
   min-height: 0;
+  /* grid-auto-flow: dense; */
+  grid-auto-flow: row;
 }
 
 .grid-box {
   aspect-ratio: 1 / 1;
+  grid-column: span 2;
 
   background-color: #3498db;
   color: white;
@@ -112,6 +115,7 @@ html {
 }
 
 .template-grid-box {
+  grid-column: span 2;
   aspect-ratio: 1 / 1;
   background-color: #bb77df; /* Das Grün */
   border-radius: 8px;
@@ -123,5 +127,22 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+}
+
+.move-template {
+  grid-column: span 1;
+  width: 100%;
+  aspect-ratio: 1 / 2;
+  background-color: #2dd117; /* Das Grün */
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Beschneidet das blaue Child an den Ecken */
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: stretch;  
   flex-direction: column;
 }
