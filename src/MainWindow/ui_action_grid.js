@@ -96,8 +96,13 @@ export function addGridTemplates(n) {
       }
 
       if (id) {
-        document.getElementById(id).replaceChildren();
-        document.getElementById(id).empty = true;
+        // document.getElementById(id).replaceChildren();
+        // document.getElementById(id).empty = true;
+
+        // remove whole tile
+        let index = layout.indexOf(id);
+        layout.splice(index,1);
+        document.getElementById("parent-" + id).remove();
       }
 
       addAssetsToTemplate(name, src, event.currentTarget);

@@ -21,6 +21,7 @@ import {
 } from "./ui_action_grid.js";
 
 export let editToggle = false;
+let assetToggle = true;
 
 // add assets to left "display" grid
 async function addAssetsToGridDisplay(name) {
@@ -75,6 +76,18 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     addGridTemplates(5);
     addGhostMoveTemplate();
+  });
+
+  document.getElementById("assetToggle").addEventListener("click",()=>{
+    if(assetToggle)
+    {
+      assetToggle = false;
+      document.getElementById("box-left").style.display = "none";
+    }
+    else{
+      assetToggle = true;
+      document.getElementById("box-left").style.display = "block";
+    }
   });
 
   document.getElementById("editToggle").addEventListener("click", (event) => {
