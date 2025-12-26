@@ -3,9 +3,9 @@ import { editToggle } from "./script.js";
 
 let numberOfTemplates = 0;
 const maxNumberOfTemplates = 200;
-let layout = [];
+export let layout = []; // id starts with 1->...
 
-function addAssetsToTemplate(assetName, assetSrc, element) {
+export function addAssetsToTemplate(assetName, assetSrc, element) {
   const div = document.createElement("div");
   div.className = "grid-box-content";
   div.draggable = true;
@@ -41,6 +41,8 @@ function addAssetsToTemplate(assetName, assetSrc, element) {
   div.appendChild(p);
   element.appendChild(div);
   element.empty = false;
+  element.name = assetName;
+  element.src = assetSrc;
 }
 
 export function addGridTemplates(n) {
@@ -64,14 +66,14 @@ export function addGridTemplates(n) {
     element.empty = true;
     layout.push(id);
 
-    element.addEventListener("dragstart",()=>{
+    element.addEventListener("dragstart", () => {
       removeMoveTemplate();
       addMoveTemplate();
     });
 
-    element.addEventListener("dragend",()=>{
+    element.addEventListener("dragend", () => {
       removeMoveTemplate();
-    })
+    });
 
     element.addEventListener("dragover", (event) => {
       if (!editToggle) {
@@ -91,6 +93,10 @@ export function addGridTemplates(n) {
       const id = event.dataTransfer.getData("application/id-screen-monkey");
       const name = event.dataTransfer.getData("application/x-screen-monkey");
       const src = event.dataTransfer.getData("application/src-screen-monkey");
+
+      element.name = name;
+      element.src = src;
+
       if (!name || name.trim() === "") {
         return;
       }
@@ -101,11 +107,12 @@ export function addGridTemplates(n) {
 
         // remove whole tile
         let index = layout.indexOf(id);
-        layout.splice(index,1);
+        layout.splice(index, 1);
         document.getElementById("parent-" + id).remove();
       }
 
       addAssetsToTemplate(name, src, event.currentTarget);
+      console.log("id of current target: " + event.currentTarget.id);
     });
     parent.appendChild(element);
     container.appendChild(parent);
@@ -130,14 +137,14 @@ function addGridTemplateBefore(m_parent) {
 
   // standart Verhalten für drag and drop!
 
-  element.addEventListener("dragstart",()=>{
+  element.addEventListener("dragstart", () => {
     removeMoveTemplate();
     addMoveTemplate();
-  })
+  });
 
-  element.addEventListener("dragend",()=>{
+  element.addEventListener("dragend", () => {
     removeMoveTemplate();
-  })
+  });
 
   element.addEventListener("dragover", (event) => {
     if (!editToggle) {
@@ -157,6 +164,10 @@ function addGridTemplateBefore(m_parent) {
     const id = event.dataTransfer.getData("application/id-screen-monkey");
     const name = event.dataTransfer.getData("application/x-screen-monkey");
     const src = event.dataTransfer.getData("application/src-screen-monkey");
+
+    element.name = name;
+    element.src = src;
+
     if (!name || name.trim() === "") {
       return;
     }
@@ -223,7 +234,7 @@ export function addMoveTemplate() {
 
 export function removeMoveTemplate() {
   const templates = document.querySelectorAll(".move-template");
-  templates.forEach((element)=> element.remove());
+  templates.forEach((element) => element.remove());
   addGhostMoveTemplate();
 }
 

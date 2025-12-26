@@ -2,6 +2,8 @@ use tauri::Manager;
 use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
 
 mod data_stream;
+use crate::data_stream::load_layout;
+use crate::data_stream::save_layout;
 use crate::data_stream::get_file_src;
 use crate::data_stream::create_new_project;
 use crate::data_stream::load_asset_names;
@@ -58,7 +60,9 @@ pub fn run() {
             set_project_path,
             create_new_project,
             load_asset_names,
-            get_file_src
+            get_file_src,
+            save_layout,
+            load_layout,
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { .. } = event {

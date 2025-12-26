@@ -1,18 +1,16 @@
-use std::{fmt::format, fs, fs::File, io, path::PathBuf, sync::OnceLock};
+use std::{alloc::Layout, fmt::format, fs::{self, File}, io, path::PathBuf, sync::OnceLock};
+use serde::{Deserialize, Serialize};
 use tauri::State;
 
 pub const SAVE_FILE: &str = "saveFile.json";
 pub const MEDIA_FOLDER: &str = "Media";
 
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Media {
     url: String,
     name: String,
-    is_video: bool,
-}
-
-pub struct MediaElement {
-    id: i32,
-    name: String,
+    is_color: bool,
+    is_empty: bool,
 }
 
 pub struct ProjectDir {
@@ -102,4 +100,32 @@ pub async fn get_file_src(state: State<'_, ProjectDir>, file_name: &str) -> Resu
     let path_str = path.to_string_lossy().into_owned();
     
     Ok(path_str)
+}
+
+#[tauri::command]
+pub async fn save_layout(state: State<'_,ProjectDir>,layout: Vec<Media>) ->Result<(),String> {
+    let json_data = serde_json::to_string_pretty(&layout).map_err(|e| e.to_string())?;  
+
+    let project_dir = state.path.get().cloned().ok_or("Error!")?;
+    let mut path = PathBuf::from(&project_dir);
+    path.push(SAVE_FILE);
+
+    fs::write(path,json_data).map_err(|e| e.to_string())?;
+
+    println!("Made automatic save!");
+
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn load_layout(state: State<'_,ProjectDir>) -> Result<Vec<Media>,String>{
+    let project_dir = state.path.get().cloned().ok_or("Error")?;
+    let mut path = PathBuf::from(&project_dir);
+    path.push(SAVE_FILE);
+
+    let json_data = fs::read_to_string(path).map_err(|e| e.to_string())?;
+
+    let layout: Vec<Media> = serde_json::from_str(&json_data).map_err(|e| e.to_string())?;
+
+    Ok(layout)
 }

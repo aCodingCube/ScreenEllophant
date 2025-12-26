@@ -20,6 +20,8 @@ import {
   removeGhostMoveTemplate,
 } from "./ui_action_grid.js";
 
+import { auto_save, load_save } from "./auto_save.js";
+
 export let editToggle = false;
 let assetToggle = true;
 
@@ -100,7 +102,15 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  document.getElementById("saveBtn").addEventListener("click",()=>{
+    auto_save();
+  })
+
+  document.getElementById("loadSaveBtn").addEventListener("click",async ()=>{
+    await load_save();
+  });
+
   document.getElementById("editToggle").style.backgroundColor = "red";
-  addGridTemplates(10);
-  addGhostMoveTemplate();
+  //addGridTemplates(10);
+  //addGhostMoveTemplate();
 });
