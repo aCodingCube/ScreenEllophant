@@ -15,20 +15,28 @@ import {
 export function auto_save() {
   let saveData = [];
 
+  if (layout.length < 1) {
+    invoke("save_empty_layout");
+    return;
+  }
+
   for (const id of layout) {
     const element = document.getElementById(id);
     const is_empty = element.empty;
     let name = "x";
     let src = "x";
+    let imgSrc = "x";
 
     if (!is_empty) {
       name = element.name;
       src = element.src;
+      imgSrc = element.imgSrc;
     }
 
     const struct = {
       url: src,
       name: name,
+      img_src: imgSrc,
       is_color: false,
       is_empty: is_empty,
     };
@@ -41,6 +49,12 @@ export function auto_save() {
 export async function load_save() {
   let result = await invoke("load_layout");
 
+  if (result[0] == "") {
+    addGridTemplates(10);
+    addGhostMoveTemplate();
+    return;
+  }
+
   let len = result.length;
 
   addGridTemplates(len);
@@ -49,7 +63,7 @@ export async function load_save() {
   let id = 1;
 
   result.forEach((array) => {
-    const { url, name, is_color, is_empty } = array;
+    const { url, name, img_src, is_color, is_empty } = array;
     if (is_empty) {
       id++;
       return;
@@ -58,8 +72,7 @@ export async function load_save() {
     if (!element) {
       return;
     }
-    let imgSrc = ""; //Todo addImg Src!
-    addAssetsToTemplate(name, url,imgSrc, element);
+    addAssetsToTemplate(name, url, img_src, element);
     id++;
   });
 }

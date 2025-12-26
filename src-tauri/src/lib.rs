@@ -7,6 +7,7 @@ use crate::data_stream::get_file_src;
 use crate::data_stream::get_media_path;
 use crate::data_stream::load_asset_names;
 use crate::data_stream::load_layout;
+use crate::data_stream::save_empty_layout;
 use crate::data_stream::save_layout;
 use crate::data_stream::set_project_path;
 use crate::data_stream::ProjectDir;
@@ -64,6 +65,7 @@ pub fn run() {
             load_asset_names,
             get_file_src,
             save_layout,
+            save_empty_layout,
             load_layout,
         ])
         .on_window_event(|window, event| {

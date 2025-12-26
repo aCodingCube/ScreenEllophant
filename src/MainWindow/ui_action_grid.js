@@ -49,6 +49,7 @@ export function addAssetsToTemplate(assetName, assetSrc, imgSrc, element) {
   element.empty = false;
   element.name = assetName;
   element.src = assetSrc;
+  element.imgSrc = imgSrc;
 }
 
 export function addGridTemplates(n) {
@@ -105,6 +106,7 @@ export function addGridTemplates(n) {
 
       element.name = name;
       element.src = src;
+      element.imgSrc = imgSrc;
 
       if (!name || name.trim() === "") {
         return;
@@ -184,6 +186,7 @@ function addGridTemplateBefore(m_parent) {
 
     element.name = name;
     element.src = src;
+    element.imgSrc = imgSrc;
 
     if (!name || name.trim() === "") {
       return;

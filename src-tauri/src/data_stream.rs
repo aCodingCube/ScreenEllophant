@@ -16,10 +16,15 @@ pub const MEDIA_FOLDER: &str = "Media";
 pub struct Media {
     url: String,
     name: String,
+    img_src: String,
     is_color: bool,
     is_empty: bool,
 }
 
+#[derive(Serialize, Deserialize)]
+struct Config {
+    save_empty: bool,
+}
 pub struct ProjectDir {
     pub path: OnceLock<String>,
 }
@@ -137,12 +142,34 @@ pub async fn save_layout(state: State<'_, ProjectDir>, layout: Vec<Media>) -> Re
 }
 
 #[tauri::command]
+pub async fn save_empty_layout(state: State<'_,ProjectDir>) -> Result<(),String>{
+    let project_dir = state.path.get().cloned().ok_or("Error!")?;
+    let mut path = PathBuf::from(&project_dir);
+    path.push(SAVE_FILE);
+
+    let config = Config {save_empty: true};
+
+    let json_data = serde_json::to_string_pretty(&config).map_err(|e| e.to_string())?;
+
+    fs::write(path,json_data).map_err(|e| e.to_string())?;
+
+    Ok(())
+}
+
+#[tauri::command]
 pub async fn load_layout(state: State<'_, ProjectDir>) -> Result<Vec<Media>, String> {
     let project_dir = state.path.get().cloned().ok_or("Error")?;
     let mut path = PathBuf::from(&project_dir);
     path.push(SAVE_FILE);
 
     let json_data = fs::read_to_string(path).map_err(|e| e.to_string())?;
+
+    // check if json-file was save empty
+    let v: serde_json::Value = serde_json::from_str(&json_data).map_err(|e| e.to_string())?;
+    if v.is_object() && v.get("save_empty").is_some(){
+        let obj = Media{url: "".to_string(),name: "".to_string(), img_src: "".to_string(),is_color: false, is_empty: false};
+        return Ok(vec![obj]);
+    }
 
     let layout: Vec<Media> = serde_json::from_str(&json_data).map_err(|e| e.to_string())?;
 
