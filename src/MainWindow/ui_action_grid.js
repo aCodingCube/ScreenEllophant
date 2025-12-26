@@ -112,7 +112,6 @@ export function addGridTemplates(n) {
       }
 
       addAssetsToTemplate(name, src, event.currentTarget);
-      console.log("id of current target: " + event.currentTarget.id);
     });
     parent.appendChild(element);
     container.appendChild(parent);
@@ -133,7 +132,12 @@ function addGridTemplateBefore(m_parent) {
   parent.id = "parent-" + id;
 
   element.empty = false;
-  layout.push(id);
+
+  // add id before other id!
+  let str = m_parent.id;
+  let otherId = str.replace("parent-","");
+  let index = layout.indexOf(otherId);
+  layout.splice(index,0,id);
 
   // standart Verhalten für drag and drop!
 

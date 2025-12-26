@@ -24,8 +24,6 @@ export function auto_save() {
       is_empty: is_empty,
     };
 
-    console.log(struct);
-
     saveData.push(struct);
   }
   invoke("save_layout", { layout: saveData });
