@@ -52,6 +52,43 @@ export function addAssetsToTemplate(assetName, assetSrc, imgSrc, element) {
   element.imgSrc = imgSrc;
 }
 
+export function addColorToTemplate(color, element) {
+  const div = document.createElement("div");
+  div.className = "grid-box-content";
+  div.draggable = true;
+  div.style.backgroundColor = color;
+
+  div.addEventListener("click", (event) => {
+    if (editToggle) {
+      return;
+    }
+    //Todo Handle click-event!
+  });
+
+  div.addEventListener("dragstart", (e) => {
+    if (!editToggle) {
+      return;
+    }
+    console.log("dragstart color!");
+    e.dataTransfer.setData("application/color-screen-monkey", color);
+    e.dataTransfer.setData("application/id-screen-monkey", element.id);
+    e.dataTransfer.effectAllowed = "copy";
+    setTimeout(() => {
+      removeMoveTemplate();
+      addMoveTemplate();
+    }, 10);
+  });
+
+  div.addEventListener("dragend", () => {
+    removeMoveTemplate();
+  });
+
+  element.appendChild(div);
+  element.empty = false;
+  element.is_color = true;
+  element.src = color;
+}
+
 export function addGridTemplates(n) {
   const container = document.getElementById("container-right");
   for (let i = 0; i < n; i++) {
@@ -99,12 +136,31 @@ export function addGridTemplates(n) {
       }
 
       event.preventDefault();
+      const color = event.dataTransfer.getData(
+        "application/color-screen-monkey"
+      );
       const id = event.dataTransfer.getData("application/id-screen-monkey");
       const name = event.dataTransfer.getData("application/x-screen-monkey");
       const src = event.dataTransfer.getData("application/src-screen-monkey");
       const imgSrc = event.dataTransfer.getData(
         "application/imgSrc-screen-monkey"
       );
+
+      if (color) {
+        element.src = color;
+        element.is_color = true;
+
+        if (id) {
+          // remove whole tile
+          let index = layout.indexOf(id);
+          layout.splice(index, 1);
+          document.getElementById("parent-" + id).remove();
+        }
+
+        addColorToTemplate(color, event.currentTarget);
+        auto_save();
+        return;
+      }
 
       element.name = name;
       element.src = src;
@@ -115,9 +171,6 @@ export function addGridTemplates(n) {
       }
 
       if (id) {
-        // document.getElementById(id).replaceChildren();
-        // document.getElementById(id).empty = true;
-
         // remove whole tile
         let index = layout.indexOf(id);
         layout.splice(index, 1);
@@ -179,14 +232,31 @@ function addGridTemplateBefore(m_parent) {
     if (!editToggle) {
       return;
     }
-
     event.preventDefault();
+
+    const color = event.dataTransfer.getData("application/color-screen-monkey");
     const id = event.dataTransfer.getData("application/id-screen-monkey");
     const name = event.dataTransfer.getData("application/x-screen-monkey");
     const src = event.dataTransfer.getData("application/src-screen-monkey");
     const imgSrc = event.dataTransfer.getData(
       "application/imgSrc-screen-monkey"
     );
+
+    if (color) {
+      element.src = color;
+      element.is_color = true;
+
+      if (id) {
+        // remove whole tile
+        let index = layout.indexOf(id);
+        layout.splice(index, 1);
+        document.getElementById("parent-" + id).remove();
+      }
+
+      addColorToTemplate(color, event.currentTarget);
+      auto_save();
+      return;
+    }
 
     element.name = name;
     element.src = src;
@@ -226,6 +296,10 @@ export function addMoveTemplate() {
     moveTemplate.addEventListener("drop", (event) => {
       event.preventDefault();
 
+      const color = event.dataTransfer.getData(
+        "application/color-screen-monkey"
+      );
+
       const targetId = event.dataTransfer.getData(
         "application/id-screen-monkey"
       );
@@ -247,6 +321,15 @@ export function addMoveTemplate() {
         document.getElementById(targetId).remove();
         const index = layout.indexOf(targetId); // remove element from id list
         layout.splice(index, 1);
+      }
+
+      if (color) {
+        addColorToTemplate(color, newTemplate);
+        if (editToggle && targetId) {
+          document.getElementById("parent-" + targetId).remove();
+        }
+        auto_save();
+        return;
       }
 
       addAssetsToTemplate(targetName, targetSrc, imgSrc, newTemplate);

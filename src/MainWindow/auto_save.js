@@ -9,6 +9,7 @@ import { layout } from "./ui_action_grid.js";
 import {
   addGridTemplates,
   addAssetsToTemplate,
+  addColorToTemplate,
   addGhostMoveTemplate,
 } from "./ui_action_grid.js";
 
@@ -26,18 +27,23 @@ export function auto_save() {
     let name = "x";
     let src = "x";
     let imgSrc = "x";
+    let is_color = false;
 
     if (!is_empty) {
-      name = element.name;
+      is_color = element.is_color;
       src = element.src;
-      imgSrc = element.imgSrc;
+      if (!is_color) {
+        is_color = false;
+        name = element.name;
+        imgSrc = element.imgSrc;
+      }
     }
 
     const struct = {
       url: src,
       name: name,
       img_src: imgSrc,
-      is_color: false,
+      is_color: is_color,
       is_empty: is_empty,
     };
 
@@ -72,7 +78,12 @@ export async function load_save() {
     if (!element) {
       return;
     }
-    addAssetsToTemplate(name, url, img_src, element);
+
+    if (is_color) {
+      addColorToTemplate(url, element);
+    } else {
+      addAssetsToTemplate(name, url, img_src, element);
+    }
     id++;
   });
 }

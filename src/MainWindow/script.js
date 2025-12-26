@@ -44,7 +44,7 @@ async function addAssetsToGridDisplay(name) {
     }
     e.dataTransfer.setData("application/x-screen-monkey", name);
     e.dataTransfer.setData("application/src-screen-monkey", name);
-    e.dataTransfer.setData("application/imgSrc-screen-monkey",img.src);
+    e.dataTransfer.setData("application/imgSrc-screen-monkey", img.src);
     e.dataTransfer.effectAllowed = "copy";
   });
 
@@ -59,6 +59,31 @@ async function addAssetsToGridDisplay(name) {
 
   div.appendChild(p);
   div.appendChild(img);
+  container.appendChild(div);
+}
+
+async function addColorToGridDisplay(color) {
+  const container = document.getElementById("container-left");
+  const div = document.createElement("div");
+  div.className = "grid-box";
+  div.draggable = true;
+  div.style.backgroundColor = color;
+
+  div.addEventListener("dragstart", (e) => {
+    if (editToggle) {
+      removeMoveTemplate();
+      addMoveTemplate();
+    }
+    e.dataTransfer.setData("application/color-screen-monkey", color);
+    e.dataTransfer.effectAllowed = "copy";
+  });
+
+  div.addEventListener("dragend", () => {
+    if (editToggle) {
+      removeMoveTemplate();
+    }
+  });
+
   container.appendChild(div);
 }
 
@@ -102,17 +127,22 @@ window.addEventListener("DOMContentLoaded", () => {
       event.currentTarget.style.backgroundColor = "red";
       removeMoveTemplate();
       const elements = document.querySelectorAll(".grid-box-content");
-      elements.forEach(element => {
+      elements.forEach((element) => {
         element.draggable = false;
       });
     } else {
       editToggle = true;
       event.currentTarget.style.backgroundColor = "green";
       const elements = document.querySelectorAll(".grid-box-content");
-      elements.forEach(element => {
+      elements.forEach((element) => {
         element.draggable = true;
       });
     }
+  });
+
+  document.getElementById("colorBtn").addEventListener("click", () => {
+    const input = document.getElementById("colorInput");
+    addColorToGridDisplay(input.value);
   });
 
   document.getElementById("editToggle").style.backgroundColor = "red";
