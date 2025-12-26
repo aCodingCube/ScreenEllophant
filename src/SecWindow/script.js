@@ -23,7 +23,7 @@ listen("preload_media", (event) => {
   // else
   const { url, isVideo, isColor } = event.payload;
   const bufferSlot = document.querySelector(".media-slot:not(.active)");
-  console.log("preload| url: " + url + "| isColor: " + isColor);
+  bufferSlot.innerHTML = "";
 
   if (!bufferSlot) return;
 
@@ -40,7 +40,6 @@ listen("preload_media", (event) => {
   } else {
     const img = document.createElement("img");
     img.src = url;
-
     bufferSlot.appendChild(img); // create img to display to
   }
 });
@@ -88,7 +87,6 @@ function triggerSwap() {
 // preload from cue
 function preloadCue() {
   const bufferSlot = document.querySelector(".media-slot:not(.active)");
-
 
   if (!bufferSlot) return;
   // load cue into bufferSlot

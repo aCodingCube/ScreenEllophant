@@ -74,8 +74,10 @@ export function addGridTemplates(n) {
     layout.push(id);
 
     element.addEventListener("dragstart", () => {
-      removeMoveTemplate();
-      addMoveTemplate();
+      if (editToggle) {
+        removeMoveTemplate();
+        addMoveTemplate();
+      }
     });
 
     element.addEventListener("dragend", () => {
@@ -154,8 +156,10 @@ function addGridTemplateBefore(m_parent) {
   // standart Verhalten für drag and drop!
 
   element.addEventListener("dragstart", () => {
-    removeMoveTemplate();
-    addMoveTemplate();
+    if (editToggle) {
+      removeMoveTemplate();
+      addMoveTemplate();
+    }
   });
 
   element.addEventListener("dragend", () => {

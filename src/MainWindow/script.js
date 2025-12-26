@@ -101,11 +101,17 @@ window.addEventListener("DOMContentLoaded", () => {
       editToggle = false;
       event.currentTarget.style.backgroundColor = "red";
       removeMoveTemplate();
+      const elements = document.querySelectorAll(".grid-box-content");
+      elements.forEach(element => {
+        element.draggable = false;
+      });
     } else {
       editToggle = true;
       event.currentTarget.style.backgroundColor = "green";
-      //addMoveTemplate();
-      //removeGhostMoveTemplate();
+      const elements = document.querySelectorAll(".grid-box-content");
+      elements.forEach(element => {
+        element.draggable = true;
+      });
     }
   });
 
