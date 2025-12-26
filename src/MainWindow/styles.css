@@ -117,6 +117,16 @@ html {
   height: 100%;
 }
 
+.grid-box-content span,
+.grid-box-content p {
+  width: 100%; /* Nutzt die volle Breite der Box */
+  white-space: nowrap; /* Text bleibt in einer Zeile */
+  overflow: hidden; /* Versteckt alles, was übersteht */
+  text-overflow: ellipsis; /* Fügt die "..." am Ende hinzu */
+  font-size: 0.8rem;
+  margin-top: auto; /* Schiebt den Text ans untere Ende der Box */
+}
+
 .grid-box-parent {
   grid-column: span 3; /* WICHTIG: Er nimmt 3 Grid-Zellen ein */
 

@@ -44,6 +44,7 @@ async function addAssetsToGridDisplay(name) {
     }
     e.dataTransfer.setData("application/x-screen-monkey", name);
     e.dataTransfer.setData("application/src-screen-monkey", name);
+    e.dataTransfer.setData("application/imgSrc-screen-monkey",img.src);
     e.dataTransfer.effectAllowed = "copy";
   });
 

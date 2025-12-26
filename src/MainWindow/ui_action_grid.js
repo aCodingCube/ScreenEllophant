@@ -6,10 +6,13 @@ let numberOfTemplates = 0;
 const maxNumberOfTemplates = 200;
 export let layout = []; // id starts with 1->...
 
-export function addAssetsToTemplate(assetName, assetSrc, element) {
+export function addAssetsToTemplate(assetName, assetSrc, imgSrc, element) {
   const div = document.createElement("div");
   div.className = "grid-box-content";
   div.draggable = true;
+
+  const img = document.createElement("img");
+  img.src = imgSrc;
 
   div.addEventListener("click", (event) => {
     if (editToggle) {
@@ -25,6 +28,7 @@ export function addAssetsToTemplate(assetName, assetSrc, element) {
     e.dataTransfer.setData("application/id-screen-monkey", element.id);
     e.dataTransfer.setData("application/x-screen-monkey", assetName);
     e.dataTransfer.setData("application/src-screen-monkey", assetSrc);
+    e.dataTransfer.setData("application/imgSrc-screen-monkey", imgSrc);
     e.dataTransfer.effectAllowed = "copy";
     setTimeout(() => {
       removeMoveTemplate();
@@ -40,6 +44,7 @@ export function addAssetsToTemplate(assetName, assetSrc, element) {
   p.innerText = assetName;
 
   div.appendChild(p);
+  div.appendChild(img);
   element.appendChild(div);
   element.empty = false;
   element.name = assetName;
@@ -94,6 +99,9 @@ export function addGridTemplates(n) {
       const id = event.dataTransfer.getData("application/id-screen-monkey");
       const name = event.dataTransfer.getData("application/x-screen-monkey");
       const src = event.dataTransfer.getData("application/src-screen-monkey");
+      const imgSrc = event.dataTransfer.getData(
+        "application/imgSrc-screen-monkey"
+      );
 
       element.name = name;
       element.src = src;
@@ -112,7 +120,7 @@ export function addGridTemplates(n) {
         document.getElementById("parent-" + id).remove();
       }
 
-      addAssetsToTemplate(name, src, event.currentTarget);
+      addAssetsToTemplate(name, src, imgSrc, event.currentTarget);
       auto_save();
     });
     parent.appendChild(element);
@@ -137,9 +145,9 @@ function addGridTemplateBefore(m_parent) {
 
   // add id before other id!
   let str = m_parent.id;
-  let otherId = str.replace("parent-","");
+  let otherId = str.replace("parent-", "");
   let index = layout.indexOf(otherId);
-  layout.splice(index,0,id);
+  layout.splice(index, 0, id);
 
   // standart Verhalten für drag and drop!
 
@@ -170,6 +178,9 @@ function addGridTemplateBefore(m_parent) {
     const id = event.dataTransfer.getData("application/id-screen-monkey");
     const name = event.dataTransfer.getData("application/x-screen-monkey");
     const src = event.dataTransfer.getData("application/src-screen-monkey");
+    const imgSrc = event.dataTransfer.getData(
+      "application/imgSrc-screen-monkey"
+    );
 
     element.name = name;
     element.src = src;
@@ -183,7 +194,7 @@ function addGridTemplateBefore(m_parent) {
       document.getElementById(id).empty = true;
     }
 
-    addAssetsToTemplate(name, src, event.currentTarget);
+    addAssetsToTemplate(name, src, imgSrc, event.currentTarget);
     auto_save();
   });
   parent.appendChild(element);
@@ -218,6 +229,9 @@ export function addMoveTemplate() {
       const targetSrc = event.dataTransfer.getData(
         "application/src-screen-monkey"
       );
+      const imgSrc = event.dataTransfer.getData(
+        "application/imgSrc-screen-monkey"
+      );
 
       const newId = addGridTemplateBefore(parent);
       const newTemplate = document.getElementById(newId);
@@ -228,7 +242,7 @@ export function addMoveTemplate() {
         layout.splice(index, 1);
       }
 
-      addAssetsToTemplate(targetName, targetSrc, newTemplate);
+      addAssetsToTemplate(targetName, targetSrc, imgSrc, newTemplate);
 
       if (editToggle && targetId) {
         document.getElementById("parent-" + targetId).remove();

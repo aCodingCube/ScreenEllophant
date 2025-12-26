@@ -58,7 +58,8 @@ export async function load_save() {
     if (!element) {
       return;
     }
-    addAssetsToTemplate(name, url, element);
+    let imgSrc = ""; //Todo addImg Src!
+    addAssetsToTemplate(name, url,imgSrc, element);
     id++;
   });
 }
