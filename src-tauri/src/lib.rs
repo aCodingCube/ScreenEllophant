@@ -1,12 +1,12 @@
 use tauri::Manager;
-use tauri::{AppHandle, WebviewUrl, WebviewWindowBuilder};
+use tauri::{AppHandle, Emitter, WebviewUrl, WebviewWindowBuilder};
 
 mod data_stream;
+use crate::data_stream::create_new_project;
+use crate::data_stream::get_file_src;
+use crate::data_stream::load_asset_names;
 use crate::data_stream::load_layout;
 use crate::data_stream::save_layout;
-use crate::data_stream::get_file_src;
-use crate::data_stream::create_new_project;
-use crate::data_stream::load_asset_names;
 use crate::data_stream::set_project_path;
 use crate::data_stream::ProjectDir;
 

@@ -111,6 +111,4 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("editToggle").style.backgroundColor = "red";
-  //addGridTemplates(10);
-  //addGhostMoveTemplate();
 });

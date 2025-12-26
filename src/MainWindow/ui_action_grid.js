@@ -1,5 +1,6 @@
 import { handleMediaClick } from "./ui_grid_logic.js";
 import { editToggle } from "./script.js";
+import { auto_save } from "./auto_save.js";
 
 let numberOfTemplates = 0;
 const maxNumberOfTemplates = 200;
@@ -112,6 +113,7 @@ export function addGridTemplates(n) {
       }
 
       addAssetsToTemplate(name, src, event.currentTarget);
+      auto_save();
     });
     parent.appendChild(element);
     container.appendChild(parent);
@@ -182,6 +184,7 @@ function addGridTemplateBefore(m_parent) {
     }
 
     addAssetsToTemplate(name, src, event.currentTarget);
+    auto_save();
   });
   parent.appendChild(element);
   container.insertBefore(parent, m_parent);
@@ -230,6 +233,7 @@ export function addMoveTemplate() {
       if (editToggle && targetId) {
         document.getElementById("parent-" + targetId).remove();
       }
+      auto_save();
     });
     parent.insertBefore(moveTemplate, element);
   }

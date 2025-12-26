@@ -2,10 +2,12 @@ const { getCurrentWebviewWindow } = window.__TAURI__.webviewWindow;
 const { invoke } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
 const { save } = window.__TAURI__.dialog;
+const {emit} = window.__TAURI__.event;
 
 const appWindow = getCurrentWebviewWindow();
 
 async function open_main_window(params) {
+  await emit("load_save");
   await invoke("open_main_window");
   await new Promise((resolve) => setTimeout(resolve, 100));
   await appWindow.close();

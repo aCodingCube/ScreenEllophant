@@ -1,7 +1,16 @@
 const { invoke } = window.__TAURI__.core;
+const { listen } = window.__TAURI__.event;
+
+listen("load_save",()=>{
+  load_save();
+});
 
 import { layout } from "./ui_action_grid.js";
-import { addGridTemplates, addAssetsToTemplate,addGhostMoveTemplate } from "./ui_action_grid.js";
+import {
+  addGridTemplates,
+  addAssetsToTemplate,
+  addGhostMoveTemplate,
+} from "./ui_action_grid.js";
 
 export function auto_save() {
   let saveData = [];
@@ -30,24 +39,23 @@ export function auto_save() {
 }
 
 export async function load_save() {
-    let result = await invoke("load_layout");
+  let result = await invoke("load_layout");
 
-    let len = result.length;
+  let len = result.length;
 
-    addGridTemplates(10);
-    addGhostMoveTemplate();
+  addGridTemplates(10);
+  addGhostMoveTemplate();
 
-    let id = 1;
+  let id = 1;
 
-    result.forEach(array => {
-        const {url,name,is_color,is_empty} = array;
-        if(is_empty)
-        {
-            id++;
-            return;
-        }
-        const element = document.getElementById("template-" + id);
-        addAssetsToTemplate(name,url,element);
-        id++;
-    });
+  result.forEach((array) => {
+    const { url, name, is_color, is_empty } = array;
+    if (is_empty) {
+      id++;
+      return;
+    }
+    const element = document.getElementById("template-" + id);
+    addAssetsToTemplate(name, url, element);
+    id++;
+  });
 }
