@@ -1,5 +1,12 @@
-use std::{alloc::Layout, fmt::format, fs::{self, File}, io, path::PathBuf, sync::OnceLock};
 use serde::{Deserialize, Serialize};
+use std::{
+    alloc::Layout,
+    fmt::format,
+    fs::{self, File},
+    io,
+    path::{Path, PathBuf},
+    sync::OnceLock,
+};
 use tauri::State;
 
 pub const SAVE_FILE: &str = "saveFile.json";
@@ -39,8 +46,20 @@ pub async fn set_project_path(
     }
 }
 
-pub async fn get_project_path(state: State<'_, ProjectDir>) -> Option<String> {
-    state.path.get().cloned()
+pub async fn get_project_path(state: State<'_, ProjectDir>) -> Result<String, String> {
+    let path = state.path.get().cloned().ok_or("Error")?;
+
+    Ok(path)
+}
+
+#[tauri::command]
+pub async fn get_media_path(state: State<'_, ProjectDir>,src_name: String) -> Result<String, String> {
+    let project_dir = state.path.get().cloned().ok_or("Error")?;
+    let mut path = PathBuf::from(&project_dir);
+    path.push(MEDIA_FOLDER);
+    path.push(src_name);
+
+    Ok(path.to_string_lossy().into_owned())
 }
 
 #[tauri::command]
@@ -98,19 +117,19 @@ pub async fn get_file_src(state: State<'_, ProjectDir>, file_name: &str) -> Resu
     path.push(file_name);
 
     let path_str = path.to_string_lossy().into_owned();
-    
+
     Ok(path_str)
 }
 
 #[tauri::command]
-pub async fn save_layout(state: State<'_,ProjectDir>,layout: Vec<Media>) ->Result<(),String> {
-    let json_data = serde_json::to_string_pretty(&layout).map_err(|e| e.to_string())?;  
+pub async fn save_layout(state: State<'_, ProjectDir>, layout: Vec<Media>) -> Result<(), String> {
+    let json_data = serde_json::to_string_pretty(&layout).map_err(|e| e.to_string())?;
 
     let project_dir = state.path.get().cloned().ok_or("Error!")?;
     let mut path = PathBuf::from(&project_dir);
     path.push(SAVE_FILE);
 
-    fs::write(path,json_data).map_err(|e| e.to_string())?;
+    fs::write(path, json_data).map_err(|e| e.to_string())?;
 
     println!("Made automatic save!");
 
@@ -118,7 +137,7 @@ pub async fn save_layout(state: State<'_,ProjectDir>,layout: Vec<Media>) ->Resul
 }
 
 #[tauri::command]
-pub async fn load_layout(state: State<'_,ProjectDir>) -> Result<Vec<Media>,String>{
+pub async fn load_layout(state: State<'_, ProjectDir>) -> Result<Vec<Media>, String> {
     let project_dir = state.path.get().cloned().ok_or("Error")?;
     let mut path = PathBuf::from(&project_dir);
     path.push(SAVE_FILE);

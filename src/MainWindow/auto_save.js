@@ -1,7 +1,7 @@
 const { invoke } = window.__TAURI__.core;
 const { listen } = window.__TAURI__.event;
 
-listen("load_save",()=>{
+listen("load_save", () => {
   load_save();
 });
 
@@ -43,7 +43,7 @@ export async function load_save() {
 
   let len = result.length;
 
-  addGridTemplates(10);
+  addGridTemplates(len);
   addGhostMoveTemplate();
 
   let id = 1;
@@ -55,6 +55,9 @@ export async function load_save() {
       return;
     }
     const element = document.getElementById("template-" + id);
+    if (!element) {
+      return;
+    }
     addAssetsToTemplate(name, url, element);
     id++;
   });

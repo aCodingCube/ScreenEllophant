@@ -22,6 +22,8 @@ import {
 
 import { auto_save, load_save } from "./auto_save.js";
 
+import { createThumbnail } from "./thumbnails.js";
+
 export let editToggle = false;
 let assetToggle = true;
 
@@ -31,6 +33,9 @@ async function addAssetsToGridDisplay(name) {
   const div = document.createElement("div");
   div.className = "grid-box";
   div.draggable = true;
+
+  const img = document.createElement("img");
+  img.src = await createThumbnail(name);
 
   div.addEventListener("dragstart", (e) => {
     if (editToggle) {
@@ -52,6 +57,7 @@ async function addAssetsToGridDisplay(name) {
   p.innerText = name;
 
   div.appendChild(p);
+  div.appendChild(img);
   container.appendChild(div);
 }
 
