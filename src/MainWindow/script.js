@@ -102,13 +102,5 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  document.getElementById("saveBtn").addEventListener("click",()=>{
-    auto_save();
-  })
-
-  document.getElementById("loadSaveBtn").addEventListener("click",async ()=>{
-    await load_save();
-  });
-
   document.getElementById("editToggle").style.backgroundColor = "red";
 });
