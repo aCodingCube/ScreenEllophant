@@ -8,7 +8,11 @@ export async function sendMedia(path) {
     path.toLowerCase().endsWith("mp4") || path.toLowerCase().endsWith("webm");
 
   const assetUrl = convertFileSrc(path);
-  await emit("preload_media", { url: assetUrl, isVideo: isVideo });
+  await emit("preload_media", {
+    url: assetUrl,
+    isVideo: isVideo,
+    isColor: false,
+  });
 }
 
 export function selectMedia(element) {

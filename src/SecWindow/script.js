@@ -9,18 +9,21 @@ let triedLoading = false;
 
 //* listen for emit-signals
 //* loading and preloading
+
 // listen for preload
 listen("preload_media", (event) => {
-  console.log("isSwapping: " + isSwapping);
-  if (isSwapping) { // if currently swapping -> load to cue
+  if (isSwapping) {
+    // if currently swapping -> load to cue
     cue[0] = event.payload.url;
     cue[1] = event.payload.isVideo;
+    cue[2] = event.payload.isColor;
     cueIsValid = true;
     return;
   }
   // else
-  const { url, isVideo } = event.payload;
+  const { url, isVideo, isColor } = event.payload;
   const bufferSlot = document.querySelector(".media-slot:not(.active)");
+  console.log("preload| url: " + url + "| isColor: " + isColor);
 
   if (!bufferSlot) return;
 
@@ -31,6 +34,9 @@ listen("preload_media", (event) => {
     video.preload = "auto";
 
     bufferSlot.appendChild(video); // create video to display to
+  } else if (isColor) {
+    const div = document.createElement("div");
+    div.style.backgroundColor = url;
   } else {
     const img = document.createElement("img");
     img.src = url;
@@ -63,10 +69,10 @@ function triggerSwap() {
     video.play().catch(() => {});
   }
 
-  oldSlot.addEventListener( // when transition finished -> clear html + is there new cue?
+  oldSlot.addEventListener(
+    // when transition finished -> clear html + is there new cue?
     "transitionend",
     () => {
-      console.log("Finished transition!");
       oldSlot.innerHTML = "";
       isSwapping = false;
       if (cueIsValid) {
@@ -83,10 +89,12 @@ function triggerSwap() {
 function preloadCue() {
   const bufferSlot = document.querySelector(".media-slot:not(.active)");
 
+
   if (!bufferSlot) return;
   // load cue into bufferSlot
   const url = cue[0];
   const isVideo = cue[1];
+  const isColor = cue[2];
   cueIsValid = false;
 
   if (isVideo) {
@@ -100,6 +108,9 @@ function preloadCue() {
       bufferSlot.appendChild(video); // add video to bufferSlot
       checkAndSwap(); // check if instant load/trigger_swap is required
     };
+  } else if (isColor) {
+    const div = document.createElement("div");
+    div.style.backgroundColor = url;
   } else {
     const img = document.createElement("img");
     img.src = url;
@@ -127,7 +138,6 @@ window.addEventListener("DOMContentLoaded", add_eventListener);
 
 function add_eventListener() {
   window.addEventListener("keydown", async (event) => {
-    console.log(event.key);
     if (event.key == "Escape") {
       await appWindow.close();
     }

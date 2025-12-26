@@ -70,21 +70,18 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("templateBtn").addEventListener("click", () => {
-    if(!editToggle)
-    {
+    if (!editToggle) {
       return;
     }
     addGridTemplates(5);
     addGhostMoveTemplate();
   });
 
-  document.getElementById("assetToggle").addEventListener("click",()=>{
-    if(assetToggle)
-    {
+  document.getElementById("assetToggle").addEventListener("click", () => {
+    if (assetToggle) {
       assetToggle = false;
       document.getElementById("box-left").style.display = "none";
-    }
-    else{
+    } else {
       assetToggle = true;
       document.getElementById("box-left").style.display = "block";
     }
