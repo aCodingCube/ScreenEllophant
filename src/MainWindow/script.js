@@ -145,5 +145,9 @@ window.addEventListener("DOMContentLoaded", () => {
     addColorToGridDisplay(input.value);
   });
 
+  document.getElementById("blackoutBtn").addEventListener("click",()=>{
+    emit("black_out");
+  })
+
   document.getElementById("editToggle").style.backgroundColor = "red";
 });

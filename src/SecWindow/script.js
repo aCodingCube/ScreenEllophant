@@ -53,7 +53,8 @@ listen("trigger_swap", () => {
 });
 
 listen("black_out",()=>{
-  const activeSlot = document.querySelector(".media-slot .active");
+  console.log("Blackout!");
+  const activeSlot = document.querySelector(".media-slot.active");
   activeSlot.innerHTML = "";
   
   const div = document.createElement("div");
