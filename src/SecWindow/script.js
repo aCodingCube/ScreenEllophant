@@ -35,8 +35,12 @@ listen("preload_media", (event) => {
 
     bufferSlot.appendChild(video); // create video to display to
   } else if (isColor) {
+    console.log("loading color: " + url);
     const div = document.createElement("div");
     div.style.backgroundColor = url;
+    div.style.width = "100%";
+    div.style.height = "100%";
+    bufferSlot.appendChild(div);
   } else {
     const img = document.createElement("img");
     img.src = url;
@@ -47,6 +51,14 @@ listen("preload_media", (event) => {
 listen("trigger_swap", () => {
   triggerSwap();
 });
+
+listen("black_out",()=>{
+  const activeSlot = document.querySelector(".media-slot .active");
+  activeSlot.innerHTML = "";
+  
+  const div = document.createElement("div");
+  div.style.backgroundColor = "black";
+})
 
 // logic for trigger_swap
 function triggerSwap() {
@@ -109,6 +121,7 @@ function preloadCue() {
   } else if (isColor) {
     const div = document.createElement("div");
     div.style.backgroundColor = url;
+    bufferSlot.appendChild(div);
   } else {
     const img = document.createElement("img");
     img.src = url;

@@ -1,4 +1,4 @@
-import { handleMediaClick } from "./ui_grid_logic.js";
+import { handleMediaClick,handleColorClick } from "./ui_grid_logic.js";
 import { editToggle } from "./script.js";
 import { auto_save } from "./auto_save.js";
 
@@ -62,7 +62,7 @@ export function addColorToTemplate(color, element) {
     if (editToggle) {
       return;
     }
-    //Todo Handle click-event!
+    handleColorClick(event,color);
   });
 
   div.addEventListener("dragstart", (e) => {
