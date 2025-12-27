@@ -30,3 +30,7 @@ body, html {
   height: 100%;
   object-fit: contain;
 }
+
+.no-transition {
+  transition: none !important;
+}

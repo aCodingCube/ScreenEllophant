@@ -1,3 +1,5 @@
+import { transitionToggle } from "./script.js";
+
 const { invoke } = window.__TAURI__.core;
 const { convertFileSrc } = window.__TAURI__.core;
 const { open } = window.__TAURI__.dialog;
@@ -49,7 +51,12 @@ export async function handleMediaClick(event, name) {
       .querySelectorAll(".playing")
       .forEach((element) => unmarkPlaying(element));
     markPlaying(element);
-    await emit("trigger_swap");
+    if(transitionToggle)
+    {
+      emit("trigger_swap");
+      return;
+    }
+    emit("trigger_swap_cut");
   } else {
     if (element.classList.contains("playing")) {
       return;
@@ -72,7 +79,12 @@ export async function handleColorClick(event, color) {
       .querySelectorAll(".playing")
       .forEach((element) => unmarkPlaying(element));
     markPlaying(element);
-    await emit("trigger_swap");
+    if(transitionToggle)
+    {
+      emit("trigger_swap");
+      return;
+    }
+    emit("trigger_swap_cut");
   } else {
     if (element.classList.contains("playing")) {
       return;

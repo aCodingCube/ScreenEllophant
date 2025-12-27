@@ -52,14 +52,17 @@ listen("trigger_swap", () => {
   triggerSwap();
 });
 
-listen("black_out",()=>{
-  console.log("Blackout!");
+listen("trigger_swap_cut", () => {
+  triggerSwapCut();
+});
+
+listen("black_out", () => {
   const activeSlot = document.querySelector(".media-slot.active");
   activeSlot.innerHTML = "";
-  
+
   const div = document.createElement("div");
   div.style.backgroundColor = "black";
-})
+});
 
 // logic for trigger_swap
 function triggerSwap() {
@@ -93,6 +96,31 @@ function triggerSwap() {
     },
     { once: true }
   );
+}
+
+function triggerSwapCut() {
+  const oldSlot = document.querySelector(".media-slot.active");
+  const newSlot = document.querySelector(".media-slot:not(.active)");
+
+  newSlot.classList.add("no-transition");
+  newSlot.classList.add("active");
+
+  const video = newSlot.querySelector("video");
+
+  if (video) {
+    video.play().catch(() => {});
+  }
+
+  oldSlot.classList.remove("active");
+  oldSlot.innerHTML = "";
+
+  setTimeout(()=>{
+    newSlot.classList.remove("no-transition");
+  },50);
+
+  if (cueIsValid) {
+    preloadCue();
+  }
 }
 
 //* cue system

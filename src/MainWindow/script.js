@@ -26,6 +26,7 @@ import { createThumbnail } from "./thumbnails.js";
 
 export let editToggle = false;
 let assetToggle = true;
+export let transitionToggle = true;
 
 // add assets to left "display" grid
 async function addAssetsToGridDisplay(name) {
@@ -149,5 +150,18 @@ window.addEventListener("DOMContentLoaded", () => {
     emit("black_out");
   })
 
+  document.getElementById("transitionToggle").addEventListener("click",(event)=>{
+    if(transitionToggle) {
+      transitionToggle = false;
+      event.currentTarget.style.backgroundColor = "red";
+    }
+    else {
+      transitionToggle = true;
+      event.currentTarget.style.backgroundColor =  "green";
+    }
+  });
+
+
   document.getElementById("editToggle").style.backgroundColor = "red";
+  document.getElementById("transitionToggle").style.backgroundColor = "green";
 });
