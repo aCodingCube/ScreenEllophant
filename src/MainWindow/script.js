@@ -33,10 +33,11 @@ async function addAssetsToGridDisplay(name) {
   const container = document.getElementById("container-left");
   const div = document.createElement("div");
   div.className = "grid-box";
-  div.draggable = true;
+  div.draggable = editToggle;
 
   const img = document.createElement("img");
   img.src = await createThumbnail(name);
+  img.draggable = false;
 
   div.addEventListener("dragstart", (e) => {
     if (editToggle) {
@@ -67,7 +68,7 @@ async function addColorToGridDisplay(color) {
   const container = document.getElementById("container-left");
   const div = document.createElement("div");
   div.className = "grid-box";
-  div.draggable = true;
+  div.draggable = editToggle;
   div.style.backgroundColor = color;
 
   div.addEventListener("dragstart", (e) => {
@@ -131,11 +132,19 @@ window.addEventListener("DOMContentLoaded", () => {
       elements.forEach((element) => {
         element.draggable = false;
       });
+      elements = document.querySelectorAll(".grid-box");
+      elements.forEach(element => {
+        element.draggable = false;
+      });
     } else {
       editToggle = true;
       event.currentTarget.style.backgroundColor = "green";
       const elements = document.querySelectorAll(".grid-box-content");
       elements.forEach((element) => {
+        element.draggable = true;
+      });
+      elements = document.querySelectorAll(".grid-box");
+      elements.forEach(element => {
         element.draggable = true;
       });
     }

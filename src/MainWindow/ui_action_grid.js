@@ -9,10 +9,11 @@ export let layout = []; // id starts with 1->...
 export function addAssetsToTemplate(assetName, assetSrc, imgSrc, element) {
   const div = document.createElement("div");
   div.className = "grid-box-content";
-  div.draggable = true;
+  div.draggable = editToggle;
 
   const img = document.createElement("img");
   img.src = imgSrc;
+  img.draggable = false;
 
   div.addEventListener("click", (event) => {
     if (editToggle) {
@@ -55,7 +56,7 @@ export function addAssetsToTemplate(assetName, assetSrc, imgSrc, element) {
 export function addColorToTemplate(color, element) {
   const div = document.createElement("div");
   div.className = "grid-box-content";
-  div.draggable = true;
+  div.draggable = editToggle;
   div.style.backgroundColor = color;
 
   div.addEventListener("click", (event) => {

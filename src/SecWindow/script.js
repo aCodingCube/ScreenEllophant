@@ -35,7 +35,6 @@ listen("preload_media", (event) => {
 
     bufferSlot.appendChild(video); // create video to display to
   } else if (isColor) {
-    console.log("loading color: " + url);
     const div = document.createElement("div");
     div.style.backgroundColor = url;
     div.style.width = "100%";
