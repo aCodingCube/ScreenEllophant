@@ -132,8 +132,8 @@ window.addEventListener("DOMContentLoaded", () => {
       elements.forEach((element) => {
         element.draggable = false;
       });
-      elements = document.querySelectorAll(".grid-box");
-      elements.forEach(element => {
+      const otherElements = document.querySelectorAll(".grid-box");
+      otherElements.forEach((element) => {
         element.draggable = false;
       });
     } else {
@@ -143,8 +143,8 @@ window.addEventListener("DOMContentLoaded", () => {
       elements.forEach((element) => {
         element.draggable = true;
       });
-      elements = document.querySelectorAll(".grid-box");
-      elements.forEach(element => {
+      const otherElements = document.querySelectorAll(".grid-box");
+      otherElements.forEach((element) => {
         element.draggable = true;
       });
     }
@@ -155,21 +155,21 @@ window.addEventListener("DOMContentLoaded", () => {
     addColorToGridDisplay(input.value);
   });
 
-  document.getElementById("blackoutBtn").addEventListener("click",()=>{
+  document.getElementById("blackoutBtn").addEventListener("click", () => {
     emit("black_out");
-  })
-
-  document.getElementById("transitionToggle").addEventListener("click",(event)=>{
-    if(transitionToggle) {
-      transitionToggle = false;
-      event.currentTarget.style.backgroundColor = "red";
-    }
-    else {
-      transitionToggle = true;
-      event.currentTarget.style.backgroundColor =  "green";
-    }
   });
 
+  document
+    .getElementById("transitionToggle")
+    .addEventListener("click", (event) => {
+      if (transitionToggle) {
+        transitionToggle = false;
+        event.currentTarget.style.backgroundColor = "red";
+      } else {
+        transitionToggle = true;
+        event.currentTarget.style.backgroundColor = "green";
+      }
+    });
 
   document.getElementById("editToggle").style.backgroundColor = "red";
   document.getElementById("transitionToggle").style.backgroundColor = "green";

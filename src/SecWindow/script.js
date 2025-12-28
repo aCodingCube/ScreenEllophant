@@ -149,7 +149,10 @@ function preloadCue() {
   } else if (isColor) {
     const div = document.createElement("div");
     div.style.backgroundColor = url;
+    div.style.width = "100%";
+    div.style.height = "100%";
     bufferSlot.appendChild(div);
+    checkAndSwap();
   } else {
     const img = document.createElement("img");
     img.src = url;

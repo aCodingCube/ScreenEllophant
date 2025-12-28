@@ -1,4 +1,4 @@
-import { handleMediaClick,handleColorClick } from "./ui_grid_logic.js";
+import { handleMediaClick, handleColorClick } from "./ui_grid_logic.js";
 import { editToggle } from "./script.js";
 import { auto_save } from "./auto_save.js";
 
@@ -57,13 +57,17 @@ export function addColorToTemplate(color, element) {
   const div = document.createElement("div");
   div.className = "grid-box-content";
   div.draggable = editToggle;
-  div.style.backgroundColor = color;
+
+  const colorDiv = document.createElement("div");
+  colorDiv.className = "color-div";
+  colorDiv.draggable = false;
+  colorDiv.style.backgroundColor = color;
 
   div.addEventListener("click", (event) => {
     if (editToggle) {
       return;
     }
-    handleColorClick(event,color);
+    handleColorClick(event, color);
   });
 
   div.addEventListener("dragstart", (e) => {
@@ -84,6 +88,7 @@ export function addColorToTemplate(color, element) {
     removeMoveTemplate();
   });
 
+  div.appendChild(colorDiv);
   element.appendChild(div);
   element.empty = false;
   element.is_color = true;
