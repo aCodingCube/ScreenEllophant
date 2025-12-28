@@ -4,15 +4,6 @@ const { open } = window.__TAURI__.dialog;
 const { emit } = window.__TAURI__.event;
 
 import {
-  sendMedia,
-  selectMedia,
-  deselectMedia,
-  markPlaying,
-  unmarkPlaying,
-  handleMediaClick,
-} from "./ui_grid_logic.js";
-
-import {
   addGridTemplates,
   addMoveTemplate,
   removeMoveTemplate,

@@ -1,4 +1,4 @@
-import { transitionToggle } from "./script.js";
+import { transitionToggle, editToggle } from "./script.js";
 
 const { invoke } = window.__TAURI__.core;
 const { convertFileSrc } = window.__TAURI__.core;
@@ -26,73 +26,115 @@ export async function sendMedia(path, is_color) {
   });
 }
 
-export function selectMedia(element) {
-  element.classList.add("selected");
+function isEditSelected(element) {
+  if (element.classList.contains("editSelected")) {
+    return true;
+  }
+
+  return false;
 }
 
-export function deselectMedia(element) {
-  element.classList.remove("selected");
+function isDisplaySelected(element) {
+  if (element.classList.contains("displaySelected")) {
+    return true;
+  }
+
+  return false;
 }
 
-export function markPlaying(element) {
+function isPlaying(element) {
+  if (element.classList.contains("playing")) {
+    return true;
+  }
+  return false;
+}
+
+function editDeselectAll() {
+  const elements = document.querySelectorAll(".editSelected");
+  elements.forEach((element) => {
+    element.classList.remove("editSelect");
+  });
+}
+
+function editSelect(element) {
+  element.classList.add("editSelected");
+}
+
+function editDeselect(element) {
+  element.classList.remove("editSelected");
+}
+
+function displayDeselectAll(element) {
+  const elements = document.querySelectorAll(".displaySelected");
+  elements.forEach((element) => {
+    element.classList.remove("displaySelected");
+  });
+}
+
+function displaySelect(element) {
+  element.classList.add("displaySelected");
+}
+
+function displayDeselect(element) {
+  element.classList.remove("displaySelected");
+}
+
+function unmarkPlayingAll()
+{
+  const elements = document.querySelectorAll(".playing");
+  elements.forEach(element => {
+    element.classList.remove("playing");
+  });
+}
+
+function markPlaying(element) {
   element.classList.add("playing");
 }
 
-export function unmarkPlaying(element) {
+function unmarkPlaying(element) {
   element.classList.remove("playing");
 }
 
 export async function handleMediaClick(event, name) {
   const element = event.currentTarget;
 
-  if (element.classList.contains("selected")) {
-    deselectMedia(element);
-    document
-      .querySelectorAll(".playing")
-      .forEach((element) => unmarkPlaying(element));
-    markPlaying(element);
-    if(transitionToggle)
-    {
-      emit("trigger_swap");
+  if (editToggle) {
+    if (isEditSelected(element)) {
       return;
     }
-    emit("trigger_swap_cut");
-  } else {
-    if (element.classList.contains("playing")) {
+    editDeselectAll();
+    editSelect(element);
+    return;
+  }
+
+  if (!editToggle) {
+    if (!isDisplaySelected(element)) {
+      displayDeselectAll();
+      displaySelect(element);
+      // preload media
+      let path = await invoke("get_file_src", { fileName: name });
+      await sendMedia(path, false);
       return;
     }
-    document
-      .querySelectorAll(".selected")
-      .forEach((element) => deselectMedia(element));
-    selectMedia(element);
-    let path = await invoke("get_file_src", { fileName: name });
-    await sendMedia(path, false);
+
+    if (isDisplaySelected(element)) {
+      displayDeselect(element);
+      unmarkPlayingAll();
+      markPlaying(element);
+      // trigger element playing
+      if(transitionToggle)
+      {
+        emit("trigger_swap");
+        return;
+      }
+      else
+      {
+        emit("trigger_swap_cut");
+        return;
+      }
+    }
+    return;
   }
 }
 
-export async function handleColorClick(event, color) {
-  const element = event.currentTarget;
-
-  if (element.classList.contains("selected")) {
-    deselectMedia(element);
-    document
-      .querySelectorAll(".playing")
-      .forEach((element) => unmarkPlaying(element));
-    markPlaying(element);
-    if(transitionToggle)
-    {
-      emit("trigger_swap");
-      return;
-    }
-    emit("trigger_swap_cut");
-  } else {
-    if (element.classList.contains("playing")) {
-      return;
-    }
-    document
-      .querySelectorAll(".selected")
-      .forEach((element) => deselectMedia(element));
-    selectMedia(element);
-    await sendMedia(color, true);
-  }
-}
+export function handleColorClick(event, color) {}

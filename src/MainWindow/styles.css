@@ -117,12 +117,12 @@ html {
   height: 100%;
 }
 
-.grid-box-content.selected {
-  background-color: #34dbbfff !important;
+.grid-box-content.displaySelected {
+  background-color: #34dbbfff;
 }
 
 .grid-box-content.playing {
-  background-color: #9534dbff !important;
+  background-color: #9534dbff;
 }
 
 .grid-box-content span,
