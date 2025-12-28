@@ -1,6 +1,8 @@
 const { getCurrentWebviewWindow } = window.__TAURI__.webviewWindow;
 const { listen } = window.__TAURI__.event;
 
+import { transitionToggle } from "../MainWindow/script.js";
+
 const appWindow = getCurrentWebviewWindow();
 const cue = {};
 let cueIsValid = false;
@@ -39,6 +41,9 @@ listen("preload_media", (event) => {
     div.style.backgroundColor = url;
     div.style.width = "100%";
     div.style.height = "100%";
+
+    bufferSlot.style.visibility = "hidden";
+    bufferSlot.innerHTML = "";
     bufferSlot.appendChild(div);
   } else {
     const img = document.createElement("img");
@@ -75,6 +80,7 @@ function triggerSwap() {
   const oldSlot = document.querySelector(".media-slot.active");
   const newSlot = document.querySelector(".media-slot:not(.active)");
 
+  newSlot.style.visibility = "visible";
   oldSlot.classList.remove("active");
   newSlot.classList.add("active");
 
@@ -101,6 +107,7 @@ function triggerSwapCut() {
   const oldSlot = document.querySelector(".media-slot.active");
   const newSlot = document.querySelector(".media-slot:not(.active)");
 
+  newSlot.style.visibility = "visible";
   newSlot.classList.add("no-transition");
   newSlot.classList.add("active");
 
@@ -113,9 +120,9 @@ function triggerSwapCut() {
   oldSlot.classList.remove("active");
   oldSlot.innerHTML = "";
 
-  setTimeout(()=>{
+  setTimeout(() => {
     newSlot.classList.remove("no-transition");
-  },50);
+  }, 50);
 
   if (cueIsValid) {
     preloadCue();
@@ -151,6 +158,8 @@ function preloadCue() {
     div.style.backgroundColor = url;
     div.style.width = "100%";
     div.style.height = "100%";
+    bufferSlot.style.visibility = "hidden";
+    bufferSlot.innerHTML = "";
     bufferSlot.appendChild(div);
     checkAndSwap();
   } else {
@@ -170,9 +179,17 @@ function checkAndSwap() {
   if (triedLoading) {
     triedLoading = false;
 
+    if (transitionToggle) {
+      requestAnimationFrame(() => {
+        setTimeout(triggerSwap, 20);
+      });
+      return;
+    }
+
     requestAnimationFrame(() => {
-      setTimeout(triggerSwap, 20);
+      setTimeout(triggerSwapCut, 20);
     });
+    return;
   }
 }
 
