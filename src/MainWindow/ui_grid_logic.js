@@ -79,10 +79,9 @@ function displayDeselect(element) {
   element.classList.remove("displaySelected");
 }
 
-function unmarkPlayingAll()
-{
+function unmarkPlayingAll() {
   const elements = document.querySelectorAll(".playing");
-  elements.forEach(element => {
+  elements.forEach((element) => {
     element.classList.remove("playing");
   });
 }
@@ -113,7 +112,7 @@ export async function handleMediaClick(event, name) {
       displaySelect(element);
       // preload media
       let path = await invoke("get_file_src", { fileName: name });
-      await sendMedia(path, false);
+      sendMedia(path, false);
       return;
     }
 
@@ -122,13 +121,10 @@ export async function handleMediaClick(event, name) {
       unmarkPlayingAll();
       markPlaying(element);
       // trigger element playing
-      if(transitionToggle)
-      {
+      if (transitionToggle) {
         emit("trigger_swap");
         return;
-      }
-      else
-      {
+      } else {
         emit("trigger_swap_cut");
         return;
       }
@@ -137,4 +133,40 @@ export async function handleMediaClick(event, name) {
   }
 }
 
-export function handleColorClick(event, color) {}
+export function handleColorClick(event, color) {
+  const element = event.currentTarget;
+
+  if (editToggle) {
+    if (isEditSelected(element)) {
+      return;
+    }
+    editDeselectAll();
+    editSelect(element);
+    return;
+  }
+
+  if (!editToggle) {
+    if (!isDisplaySelected(element)) {
+      displayDeselectAll();
+      displaySelect(element);
+      // preload media
+      sendMedia(color, true);
+      return;
+    }
+
+    if (isDisplaySelected(element)) {
+      displayDeselect(element);
+      unmarkPlayingAll();
+      markPlaying(element);
+      // trigger element playing
+      if (transitionToggle) {
+        emit("trigger_swap");
+        return;
+      } else {
+        emit("trigger_swap_cut");
+        return;
+      }
+    }
+    return;
+  }
+}
