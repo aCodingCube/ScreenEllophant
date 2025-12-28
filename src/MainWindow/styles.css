@@ -125,6 +125,10 @@ html {
   background-color: #9534dbff;
 }
 
+.grid-box-content.editSelected {
+  background-color: #34dbbfff;
+}
+
 .grid-box-content span,
 .grid-box-content p {
   width: 100%; /* Nutzt die volle Breite der Box */

@@ -16,9 +16,6 @@ export function addAssetsToTemplate(assetName, assetSrc, imgSrc, element) {
   img.draggable = false;
 
   div.addEventListener("click", (event) => {
-    if (editToggle) {
-      return;
-    }
     handleMediaClick(event, assetName);
   });
 
@@ -64,9 +61,6 @@ export function addColorToTemplate(color, element) {
   colorDiv.style.backgroundColor = color;
 
   div.addEventListener("click", (event) => {
-    if (editToggle) {
-      return;
-    }
     handleColorClick(event, color);
   });
 

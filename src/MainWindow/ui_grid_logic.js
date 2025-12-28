@@ -52,7 +52,7 @@ function isPlaying(element) {
 function editDeselectAll() {
   const elements = document.querySelectorAll(".editSelected");
   elements.forEach((element) => {
-    element.classList.remove("editSelect");
+    element.classList.remove("editSelected");
   });
 }
 
@@ -168,5 +168,38 @@ export function handleColorClick(event, color) {
       }
     }
     return;
+  }
+}
+
+export function selectionModeChange()
+{
+  if(editToggle)
+  {
+    const selected = document.querySelectorAll(".displaySelected");
+    selected.forEach(element => {
+      element.classList.add("displaySelected-hidden");
+      element.classList.remove("displaySelected");
+    });
+    const playing = document.querySelectorAll(".playing");
+    playing.forEach(element => {
+      element.classList.add("playing-hidden");
+      element.classList.remove("playing");
+    });
+    return;
+  }
+
+  if(!editToggle)
+  {
+    editDeselectAll();
+    const selected = document.querySelectorAll(".displaySelected-hidden");
+    selected.forEach(element => {
+      element.classList.add("displaySelected");
+      element.classList.remove("displaySelected-hidden");
+    });
+    const playing = document.querySelectorAll(".playing-hidden");
+    playing.forEach(element => {
+      element.classList.add("playing");
+      element.classList.remove("playing-hidden");
+    });
   }
 }

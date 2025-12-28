@@ -14,6 +14,7 @@ import {
 import { auto_save, load_save } from "./auto_save.js";
 
 import { createThumbnail } from "./thumbnails.js";
+import { selectionModeChange } from "./ui_grid_logic.js";
 
 export let editToggle = false;
 let assetToggle = true;
@@ -139,6 +140,7 @@ window.addEventListener("DOMContentLoaded", () => {
         element.draggable = true;
       });
     }
+    selectionModeChange();
   });
 
   document.getElementById("colorBtn").addEventListener("click", () => {
