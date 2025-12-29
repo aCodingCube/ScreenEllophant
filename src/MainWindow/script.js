@@ -14,7 +14,8 @@ import {
 import { auto_save, load_save } from "./auto_save.js";
 
 import { createThumbnail } from "./thumbnails.js";
-import { selectionModeChange } from "./ui_grid_logic.js";
+import { selectionModeChange, unmarkPlayingAll } from "./ui_grid_logic.js";
+import { keyRightArrow, keyLeftArrow, keyEnter } from "./keyboard_logic.js";
 
 export let editToggle = false;
 let assetToggle = true;
@@ -149,6 +150,8 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("blackoutBtn").addEventListener("click", () => {
+    unmarkPlayingAll();
+
     emit("black_out");
   });
 
@@ -166,4 +169,30 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("editToggle").style.backgroundColor = "red";
   document.getElementById("transitionToggle").style.backgroundColor = "green";
+});
+
+window.addEventListener("keydown", (event) => {
+  if (event.repeat) {
+    return;
+  }
+
+  switch (event.key) {
+    case "ArrowRight":
+      event.preventDefault();
+      keyRightArrow();
+      break;
+    case "ArrowLeft":
+      event.preventDefault();
+      keyLeftArrow();
+      break;
+    case " ":
+      event.preventDefault();
+      unmarkPlayingAll();
+      emit("black_out");
+      break;
+    case "Enter":
+      event.preventDefault();
+      keyEnter();
+      break;
+  }
 });

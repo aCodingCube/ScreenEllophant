@@ -64,14 +64,14 @@ function editDeselect(element) {
   element.classList.remove("editSelected");
 }
 
-function displayDeselectAll(element) {
+export function displayDeselectAll(element) {
   const elements = document.querySelectorAll(".displaySelected");
   elements.forEach((element) => {
     element.classList.remove("displaySelected");
   });
 }
 
-function displaySelect(element) {
+export function displaySelect(element) {
   element.classList.add("displaySelected");
 }
 
@@ -79,14 +79,14 @@ function displayDeselect(element) {
   element.classList.remove("displaySelected");
 }
 
-function unmarkPlayingAll() {
+export function unmarkPlayingAll() {
   const elements = document.querySelectorAll(".playing");
   elements.forEach((element) => {
     element.classList.remove("playing");
   });
 }
 
-function markPlaying(element) {
+export function markPlaying(element) {
   element.classList.add("playing");
 }
 
@@ -116,7 +116,7 @@ export async function handleMediaClick(event, name) {
       return;
     }
 
-    if (isDisplaySelected(element)) {
+    if (isDisplaySelected(element) && !isPlaying(element)) {
       displayDeselect(element);
       unmarkPlayingAll();
       markPlaying(element);
@@ -154,7 +154,7 @@ export function handleColorClick(event, color) {
       return;
     }
 
-    if (isDisplaySelected(element)) {
+    if (isDisplaySelected(element) && !isPlaying(element)) {
       displayDeselect(element);
       unmarkPlayingAll();
       markPlaying(element);
@@ -171,35 +171,78 @@ export function handleColorClick(event, color) {
   }
 }
 
-export function selectionModeChange()
-{
-  if(editToggle)
-  {
+export function selectionModeChange() {
+  if (editToggle) {
     const selected = document.querySelectorAll(".displaySelected");
-    selected.forEach(element => {
+    selected.forEach((element) => {
       element.classList.add("displaySelected-hidden");
       element.classList.remove("displaySelected");
     });
     const playing = document.querySelectorAll(".playing");
-    playing.forEach(element => {
+    playing.forEach((element) => {
       element.classList.add("playing-hidden");
       element.classList.remove("playing");
     });
     return;
   }
 
-  if(!editToggle)
-  {
+  if (!editToggle) {
     editDeselectAll();
     const selected = document.querySelectorAll(".displaySelected-hidden");
-    selected.forEach(element => {
+    selected.forEach((element) => {
       element.classList.add("displaySelected");
       element.classList.remove("displaySelected-hidden");
     });
     const playing = document.querySelectorAll(".playing-hidden");
-    playing.forEach(element => {
+    playing.forEach((element) => {
       element.classList.add("playing");
       element.classList.remove("playing-hidden");
     });
+  }
+}
+
+// for keyboard use
+
+export async function displaySelectMedia(element) {
+  if (editToggle) {
+    return;
+  }
+
+  if (isDisplaySelected(element)) {
+    return;
+  }
+
+  displayDeselectAll();
+  displaySelect(element.firstChild);
+  // preload media
+  if (element.is_color) {
+    sendMedia(element.src, true);
+    return;
+  }
+
+  let path = await invoke("get_file_src", { fileName: element.src });
+  sendMedia(path, false);
+}
+
+export function playingElement(element) {
+  if (editToggle) {
+    return;
+  }
+
+  if (!isDisplaySelected(element) || isPlaying(element)) {
+    return;
+  }
+
+  editDeselect(element);
+  unmarkPlayingAll();
+  markPlaying(element);
+
+  // trigger element playing
+  if (transitionToggle) {
+    emit("trigger_swap");
+    return;
+  } else {
+    emit("trigger_swap_cut");
+    return;
   }
 }
