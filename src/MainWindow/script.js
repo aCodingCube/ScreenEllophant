@@ -201,6 +201,22 @@ window.addEventListener("DOMContentLoaded", () => {
     auto_save();
   });
 
+  document.getElementById("renameBtn").addEventListener("click",()=>{
+    if(!editToggle)
+    {
+      return;
+    }
+
+    const name = prompt("Umbenennen zu:");
+
+    const child = document.querySelector(".editSelected");
+    const parentElement = child.parentElement;
+    parentElement.name = name;
+    const p = child.firstChild;
+    p.innerText = name;
+    auto_save();
+  });
+
   document
     .getElementById("transitionToggle")
     .addEventListener("click", (event) => {
