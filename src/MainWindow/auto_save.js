@@ -22,6 +22,8 @@ export async function auto_save() {
     return;
   }
 
+  console.log("layout: " + layout);
+
   for (const id of layout) {
     const element = document.getElementById(id);
     const is_empty = element.empty;
@@ -73,11 +75,11 @@ export async function load_save() {
     let { url, name, img_src, is_color, is_empty } = array;
     if (is_empty) {
       id++;
-      return;
+      continue;
     }
     const element = document.getElementById("template-" + id);
     if (!element) {
-      return;
+      continue;
     }
 
     if (is_color) {
@@ -85,9 +87,9 @@ export async function load_save() {
     } else {
       const isValid = await isSrcValid(url);
       if (!isValid) {
-        name = "Fehler!";
-        url = "Error!";
-        img_src = "";
+        name = "Fehlende Datei!";
+        alert('Datei "' + url + '" wurde nicht gefunden!');
+        url = "missing url";
       }
       addAssetsToTemplate(name, url, img_src, element);
     }
