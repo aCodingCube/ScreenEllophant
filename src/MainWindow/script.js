@@ -26,6 +26,7 @@ import { keyRightArrow, keyLeftArrow, keyEnter } from "./keyboard_logic.js";
 export let editToggle = false;
 let assetToggle = true;
 export let transitionToggle = true;
+let visibilityToggle = true;
 
 // add assets to left "display" grid
 async function addAssetsToGridDisplay(name) {
@@ -217,6 +218,24 @@ window.addEventListener("DOMContentLoaded", () => {
     auto_save();
   });
 
+  document.getElementById("endBtn").addEventListener("click",async ()=>{
+    await invoke("close_sec_window");
+  });
+
+  document.getElementById("visibilityToggle").addEventListener("click",async (event)=>{
+    if(visibilityToggle)
+    {
+      visibilityToggle = false;
+      event.currentTarget.style.backgroundColor = "red";
+      await invoke("hide_sec_window");
+    }
+    else{
+      visibilityToggle = true;
+      event.currentTarget.style.backgroundColor = "green";
+      await invoke("show_sec_window");
+    }
+  });
+
   document
     .getElementById("transitionToggle")
     .addEventListener("click", (event) => {
@@ -231,6 +250,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("editToggle").style.backgroundColor = "red";
   document.getElementById("transitionToggle").style.backgroundColor = "green";
+  document.getElementById("visibilityToggle").style.backgroundColor = "green";
 });
 
 window.addEventListener("keydown", (event) => {

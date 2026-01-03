@@ -1,4 +1,4 @@
-use tauri::Manager;
+use tauri::{App, Manager};
 use tauri::{AppHandle, Emitter, WebviewUrl, WebviewWindowBuilder};
 
 mod data_stream;
@@ -39,6 +39,27 @@ async fn open_window(app: AppHandle) {
 }
 
 #[tauri::command]
+async fn close_sec_window(app: AppHandle) {
+    if let Some(window) = app.get_webview_window("second-window") {
+        window.close().unwrap();
+    }
+}
+
+#[tauri::command]
+async fn hide_sec_window(app: AppHandle) {
+    if let Some(window) = app.get_webview_window("second-window") {
+        window.hide().unwrap();
+    }
+}
+
+#[tauri::command]
+async fn show_sec_window(app: AppHandle) {
+    if let Some(window) = app.get_webview_window("second-window"){
+        window.show().unwrap();
+    }
+}
+
+#[tauri::command]
 async fn open_main_window(app: AppHandle) {
     if let Some(window) = app.get_webview_window("main") {
         window.show().unwrap();
@@ -67,6 +88,9 @@ pub fn run() {
             save_layout,
             save_empty_layout,
             load_layout,
+            close_sec_window,
+            hide_sec_window,
+            show_sec_window,
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { .. } = event {
