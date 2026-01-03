@@ -49,7 +49,7 @@ function isPlaying(element) {
   return false;
 }
 
-function editDeselectAll() {
+export function editDeselectAll() {
   const elements = document.querySelectorAll(".editSelected");
   elements.forEach((element) => {
     element.classList.remove("editSelected");

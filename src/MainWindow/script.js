@@ -9,12 +9,13 @@ import {
   removeMoveTemplate,
   addGhostMoveTemplate,
   removeGhostMoveTemplate,
+  layout,
 } from "./ui_action_grid.js";
 
 import { auto_save, load_save } from "./auto_save.js";
 
 import { createThumbnail } from "./thumbnails.js";
-import { selectionModeChange, unmarkPlayingAll } from "./ui_grid_logic.js";
+import { selectionModeChange, unmarkPlayingAll, editDeselectAll } from "./ui_grid_logic.js";
 import { keyRightArrow, keyLeftArrow, keyEnter } from "./keyboard_logic.js";
 
 export let editToggle = false;
@@ -153,6 +154,44 @@ window.addEventListener("DOMContentLoaded", () => {
     unmarkPlayingAll();
 
     emit("black_out");
+  });
+
+  document.getElementById("deleteBtn").addEventListener("click",()=>{
+    if(!editToggle)
+    {
+      return;
+    }
+
+    const child = document.querySelector(".editSelected");
+    const id = child.parentElement.id;
+    layout.splice(layout.indexOf(id),1);
+    const element = child.parentElement.parentElement.remove();
+    editDeselectAll();  
+    addGhostMoveTemplate();
+    auto_save();
+  });
+
+  document.getElementById("templateDeleteBtn").addEventListener("click",()=>{
+    if(!editToggle)
+    {
+      return;
+    }
+    const newLayout = layout.filter(id =>{
+      const element = document.getElementById(id);
+
+      if(element.empty)
+      {
+        element.parentElement.remove();
+        return false;
+      }
+      return true;
+    });
+
+    layout.length = 0;
+    layout.push(...newLayout);
+
+    addGhostMoveTemplate();
+    auto_save();
   });
 
   document
