@@ -1,4 +1,5 @@
 const { invoke } = window.__TAURI__.core;
+const { exists } = window.__TAURI__.fs;
 const { listen } = window.__TAURI__.event;
 
 listen("load_save", () => {
@@ -13,7 +14,7 @@ import {
   addGhostMoveTemplate,
 } from "./ui_action_grid.js";
 
-export function auto_save() {
+export async function auto_save() {
   let saveData = [];
 
   if (layout.length < 1) {
@@ -68,8 +69,8 @@ export async function load_save() {
 
   let id = 1;
 
-  result.forEach((array) => {
-    const { url, name, img_src, is_color, is_empty } = array;
+  for (const array of result) {
+    let { url, name, img_src, is_color, is_empty } = array;
     if (is_empty) {
       id++;
       return;
@@ -82,8 +83,24 @@ export async function load_save() {
     if (is_color) {
       addColorToTemplate(url, element);
     } else {
+      const isValid = await isSrcValid(url);
+      if (!isValid) {
+        name = "Fehler!";
+        url = "Error!";
+        img_src = "";
+      }
       addAssetsToTemplate(name, url, img_src, element);
     }
     id++;
-  });
+  }
+}
+
+async function isSrcValid(src) {
+  let path = await invoke("get_file_src", { fileName: src });
+  try {
+    console.log("path: " + path + " exists: " + await exists(path));
+    return await exists(path);
+  } catch (err) {
+    return false;
+  }
 }

@@ -18,6 +18,10 @@
     {
       "identifier": "fs:allow-write",
       "allow": [{ "path": "**" }]
+    },
+    {
+      "identifier": "fs:allow-exists",
+      "allow": [{ "path": "**" }]
     }
   ]
 }
