@@ -15,7 +15,12 @@ import {
 import { auto_save, load_save } from "./auto_save.js";
 
 import { createThumbnail } from "./thumbnails.js";
-import { selectionModeChange, unmarkPlayingAll, editDeselectAll } from "./ui_grid_logic.js";
+import {
+  selectionModeChange,
+  unmarkPlayingAll,
+  editDeselectAll,
+  displayDeselectAll,
+} from "./ui_grid_logic.js";
 import { keyRightArrow, keyLeftArrow, keyEnter } from "./keyboard_logic.js";
 
 export let editToggle = false;
@@ -153,34 +158,36 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("blackoutBtn").addEventListener("click", () => {
     unmarkPlayingAll();
 
+    if (transitionToggle) {
+      emit("black_out_fade");
+      return;
+    }
+
     emit("black_out");
   });
 
-  document.getElementById("deleteBtn").addEventListener("click",()=>{
-    if(!editToggle)
-    {
+  document.getElementById("deleteBtn").addEventListener("click", () => {
+    if (!editToggle) {
       return;
     }
 
     const child = document.querySelector(".editSelected");
     const id = child.parentElement.id;
-    layout.splice(layout.indexOf(id),1);
+    layout.splice(layout.indexOf(id), 1);
     const element = child.parentElement.parentElement.remove();
-    editDeselectAll();  
+    editDeselectAll();
     addGhostMoveTemplate();
     auto_save();
   });
 
-  document.getElementById("templateDeleteBtn").addEventListener("click",()=>{
-    if(!editToggle)
-    {
+  document.getElementById("templateDeleteBtn").addEventListener("click", () => {
+    if (!editToggle) {
       return;
     }
-    const newLayout = layout.filter(id =>{
+    const newLayout = layout.filter((id) => {
       const element = document.getElementById(id);
 
-      if(element.empty)
-      {
+      if (element.empty) {
         element.parentElement.remove();
         return false;
       }
@@ -227,6 +234,10 @@ window.addEventListener("keydown", (event) => {
     case " ":
       event.preventDefault();
       unmarkPlayingAll();
+      if (transitionToggle) {
+        emit("black_out_fade");
+        return;
+      }
       emit("black_out");
       break;
     case "Enter":

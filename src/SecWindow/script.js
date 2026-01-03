@@ -22,6 +22,11 @@ listen("preload_media", (event) => {
     cueIsValid = true;
     return;
   }
+
+  cue[0] = event.payload.url;
+  cue[1] = event.payload.isVideo;
+  cue[2] = event.payload.isColor;
+
   // else
   const { url, isVideo, isColor } = event.payload;
   const bufferSlot = document.querySelector(".media-slot:not(.active)");
@@ -66,6 +71,22 @@ listen("black_out", () => {
 
   const div = document.createElement("div");
   div.style.backgroundColor = "black";
+});
+
+listen("black_out_fade", () => {
+  const bufferSlot = document.querySelector(".media-slot:not(.active)");
+  const bufferCopy = bufferSlot;
+  bufferSlot.innerHTML = "";
+  const div = document.createElement("div");
+  div.style.backgroundColor = "black";
+  div.style.width = "100%";
+  div.style.height = "100%";
+  bufferSlot.style.visibility = "hidden";
+  bufferSlot.appendChild(div);
+
+  cueIsValid = true;
+
+  triggerSwap();
 });
 
 // logic for trigger_swap
