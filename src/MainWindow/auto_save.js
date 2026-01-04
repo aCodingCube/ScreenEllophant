@@ -22,8 +22,6 @@ export async function auto_save() {
     return;
   }
 
-  console.log("layout: " + layout);
-
   for (const id of layout) {
     const element = document.getElementById(id);
     const is_empty = element.empty;
@@ -100,7 +98,6 @@ export async function load_save() {
 async function isSrcValid(src) {
   let path = await invoke("get_file_src", { fileName: src });
   try {
-    console.log("path: " + path + " exists: " + await exists(path));
     return await exists(path);
   } catch (err) {
     return false;

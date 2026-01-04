@@ -89,6 +89,35 @@ async function addColorToGridDisplay(color) {
   container.appendChild(div);
 }
 
+function editToggleFn() {
+  const element = document.getElementById("editToggle");
+  if (editToggle) {
+    editToggle = false;
+    element.style.backgroundColor = "red";
+    removeMoveTemplate();
+    const elements = document.querySelectorAll(".grid-box-content");
+    elements.forEach((element) => {
+      element.draggable = false;
+    });
+    const otherElements = document.querySelectorAll(".grid-box");
+    otherElements.forEach((element) => {
+      element.draggable = false;
+    });
+  } else {
+    editToggle = true;
+    element.style.backgroundColor = "green";
+    const elements = document.querySelectorAll(".grid-box-content");
+    elements.forEach((element) => {
+      element.draggable = true;
+    });
+    const otherElements = document.querySelectorAll(".grid-box");
+    otherElements.forEach((element) => {
+      element.draggable = true;
+    });
+  }
+  selectionModeChange();
+}
+
 //* Event-Listener
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("launchBtn").addEventListener("click", async (e) => {
@@ -124,31 +153,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("editToggle").addEventListener("click", (event) => {
-    if (editToggle) {
-      editToggle = false;
-      event.currentTarget.style.backgroundColor = "red";
-      removeMoveTemplate();
-      const elements = document.querySelectorAll(".grid-box-content");
-      elements.forEach((element) => {
-        element.draggable = false;
-      });
-      const otherElements = document.querySelectorAll(".grid-box");
-      otherElements.forEach((element) => {
-        element.draggable = false;
-      });
-    } else {
-      editToggle = true;
-      event.currentTarget.style.backgroundColor = "green";
-      const elements = document.querySelectorAll(".grid-box-content");
-      elements.forEach((element) => {
-        element.draggable = true;
-      });
-      const otherElements = document.querySelectorAll(".grid-box");
-      otherElements.forEach((element) => {
-        element.draggable = true;
-      });
-    }
-    selectionModeChange();
+    editToggleFn();
   });
 
   document.getElementById("colorBtn").addEventListener("click", () => {
@@ -202,9 +207,8 @@ window.addEventListener("DOMContentLoaded", () => {
     auto_save();
   });
 
-  document.getElementById("renameBtn").addEventListener("click",()=>{
-    if(!editToggle)
-    {
+  document.getElementById("renameBtn").addEventListener("click", () => {
+    if (!editToggle) {
       return;
     }
 
@@ -218,23 +222,23 @@ window.addEventListener("DOMContentLoaded", () => {
     auto_save();
   });
 
-  document.getElementById("endBtn").addEventListener("click",async ()=>{
+  document.getElementById("endBtn").addEventListener("click", async () => {
     await invoke("close_sec_window");
   });
 
-  document.getElementById("visibilityToggle").addEventListener("click",async (event)=>{
-    if(visibilityToggle)
-    {
-      visibilityToggle = false;
-      event.currentTarget.style.backgroundColor = "red";
-      await invoke("hide_sec_window");
-    }
-    else{
-      visibilityToggle = true;
-      event.currentTarget.style.backgroundColor = "green";
-      await invoke("show_sec_window");
-    }
-  });
+  document
+    .getElementById("visibilityToggle")
+    .addEventListener("click", async (event) => {
+      if (visibilityToggle) {
+        visibilityToggle = false;
+        event.currentTarget.style.backgroundColor = "red";
+        await invoke("hide_sec_window");
+      } else {
+        visibilityToggle = true;
+        event.currentTarget.style.backgroundColor = "green";
+        await invoke("show_sec_window");
+      }
+    });
 
   document
     .getElementById("transitionToggle")
@@ -279,6 +283,9 @@ window.addEventListener("keydown", (event) => {
     case "Enter":
       event.preventDefault();
       keyEnter();
+      break;
+    case "e":
+      editToggleFn();
       break;
   }
 });

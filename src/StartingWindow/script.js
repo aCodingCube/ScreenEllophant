@@ -49,7 +49,6 @@ async function create_new_project(path) {
 window.addEventListener("DOMContentLoaded", () => {
   // load project
   document.getElementById("folderBtn").addEventListener("click", async () => {
-    console.log("pressed folder Btn");
     const result = await chooseFolder();
     if (result) {
       await set_project_path(result);

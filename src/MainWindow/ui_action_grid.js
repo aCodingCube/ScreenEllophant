@@ -68,7 +68,6 @@ export function addColorToTemplate(color, element) {
     if (!editToggle) {
       return;
     }
-    console.log("dragstart color!");
     e.dataTransfer.setData("application/color-screen-monkey", color);
     e.dataTransfer.setData("application/id-screen-monkey", element.id);
     e.dataTransfer.effectAllowed = "copy";

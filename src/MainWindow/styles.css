@@ -21,18 +21,18 @@ html {
   min-height: 0;
 }
 
-.setting-btns {
-  background-color: greenyellow;
-  width: 100%;
-  height: 100%;
-  flex: 3;
-}
-
 #mainBtns {
-  background-color: aquamarine;
+  background-color: rgb(69, 69, 69);
   width: 100%;
   height: 100%;
-  flex: 1;
+  flex: 6;
+} 
+
+.btn-menus {
+  background-color: rgb(118, 118, 118);
+  width: 100%;
+  height: 100%;
+  flex: 7;
 }
 
 .bottom-area {
