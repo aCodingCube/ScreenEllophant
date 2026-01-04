@@ -4,6 +4,7 @@ body, html {
   overflow: hidden;
   background-color: black;
   user-select: none;
+  cursor: none;
 }
 
 .media-slot {

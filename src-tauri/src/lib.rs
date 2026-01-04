@@ -33,8 +33,15 @@ async fn open_window(app: AppHandle) {
             .build()
             .unwrap();
 
+    if let Some(monitor) = monitors.get(1) {
+        window.set_fullscreen(true).unwrap();
+    }
+    else
+    {
+        window.set_fullscreen(false).unwrap();
+    }
+
     window.set_cursor_visible(false).unwrap();
-    //window.set_focus().unwrap();
     window.set_always_on_top(true).unwrap();
 }
 

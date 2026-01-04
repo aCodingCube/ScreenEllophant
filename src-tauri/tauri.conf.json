@@ -13,7 +13,9 @@
         "title": "EProjections - Startdialog",
         "label": "starting-window",
         "url": "StartingWindow/index.html",
-        "visible": true
+        "visible": true,
+        "maximized": true,
+        "theme": "Dark"
       },
       {
         "label": "main",
@@ -22,6 +24,8 @@
         "width": 800,
         "height": 600,
         "url": "MainWindow/index.html",
+        "maximized": true,
+        "theme": "Dark",
         "dragDropEnabled": false
       }
     ],
