@@ -92,8 +92,16 @@ async function addColorToGridDisplay(color) {
 function editToggleFn() {
   const element = document.getElementById("editToggle");
   if (editToggle) {
+    // display-mode
     editToggle = false;
     element.style.backgroundColor = "red";
+
+    document.getElementById("editBtns").classList.add("hidden-btn-menus");
+    document.getElementById("editBtns").classList.remove("btn-menus");
+    document.getElementById("displayBtns").classList.remove("hidden-btn-menus");
+    document.getElementById("displayBtns").classList.add("btn-menus");
+    document.getElementById("modeLable").innerText = "presentieren";
+
     removeMoveTemplate();
     const elements = document.querySelectorAll(".grid-box-content");
     elements.forEach((element) => {
@@ -104,8 +112,16 @@ function editToggleFn() {
       element.draggable = false;
     });
   } else {
+    // edit-mode
     editToggle = true;
     element.style.backgroundColor = "green";
+
+    document.getElementById("displayBtns").classList.add("hidden-btn-menus");
+    document.getElementById("displayBtns").classList.remove("btn-menus");
+    document.getElementById("editBtns").classList.remove("hidden-btn-menus");
+    document.getElementById("editBtns").classList.add("btn-menus");
+    document.getElementById("modeLable").innerText = "bearbeiten";
+
     const elements = document.querySelectorAll(".grid-box-content");
     elements.forEach((element) => {
       element.draggable = true;
