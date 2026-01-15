@@ -3,6 +3,7 @@ html {
   margin: 0;
   height: 100%;
   user-select: none;
+  overflow: hidden;
 }
 
 .layout-container {
@@ -34,6 +35,12 @@ html {
   height: 100%;
   flex: 7;
   visibility: visible;
+
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  gap: 2%;
+  box-sizing: border-box;
 }
 
 .hidden-btn-menus {
@@ -61,12 +68,25 @@ html {
   background-color: #181818;
   color: white;
   flex: 3;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 /* right */
 .box:nth-child(2) {
   background-color: #181818;
   color: white;
   flex: 7;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+#leftUpperContainer {
+  background-color: red;
+  width: 100%;
+  height: 5%;
+  display: flex;
 }
 
 .grid-container {

@@ -10,11 +10,13 @@
     "withGlobalTauri": true,
     "windows": [
       {
-        "title": "EProjections - Startdialog",
+        "title": "Screen Ellophant",
         "label": "starting-window",
         "url": "StartingWindow/index.html",
         "visible": true,
-        "maximized": true,
+        "maximized": false,
+        "width": 800,
+        "height": 600,
         "theme": "Dark"
       },
       {

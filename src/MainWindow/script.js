@@ -134,6 +134,24 @@ function editToggleFn() {
   selectionModeChange();
 }
 
+function transitionToggleFn() {
+  if(!editToggle)
+  {
+    return;
+  }
+  const button = document.getElementById("transitionToggle");
+  const text = document.getElementById("transitionLable");
+  if (transitionToggle) {
+    transitionToggle = false;
+    button.style.backgroundColor = "red";
+    text.innerText = "CUT";
+  } else {
+    transitionToggle = true;
+    button.style.backgroundColor = "green";
+    text.innerText = "FADE";
+  }
+}
+
 //* Event-Listener
 window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("launchBtn").addEventListener("click", async (e) => {
@@ -258,14 +276,8 @@ window.addEventListener("DOMContentLoaded", () => {
 
   document
     .getElementById("transitionToggle")
-    .addEventListener("click", (event) => {
-      if (transitionToggle) {
-        transitionToggle = false;
-        event.currentTarget.style.backgroundColor = "red";
-      } else {
-        transitionToggle = true;
-        event.currentTarget.style.backgroundColor = "green";
-      }
+    .addEventListener("click", () => {
+      transitionToggleFn();
     });
 
   document.getElementById("editToggle").style.backgroundColor = "red";
@@ -273,7 +285,10 @@ window.addEventListener("DOMContentLoaded", () => {
   document.getElementById("visibilityToggle").style.backgroundColor = "green";
 });
 
+window.addEventListener('contextmenu', (e) => e.preventDefault());
+
 window.addEventListener("keydown", (event) => {
+  // event.preventDefault(); //! Später wieder aktivieren!
   if (event.repeat) {
     return;
   }
@@ -302,6 +317,9 @@ window.addEventListener("keydown", (event) => {
       break;
     case "e":
       editToggleFn();
+      break;
+    case "t":
+      transitionToggleFn();
       break;
   }
 });
