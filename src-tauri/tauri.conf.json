@@ -28,7 +28,8 @@
         "url": "MainWindow/index.html",
         "maximized": true,
         "theme": "Dark",
-        "dragDropEnabled": false
+        "dragDropEnabled": false,
+        "decorations": false
       }
     ],
     "security": {

@@ -92,15 +92,16 @@ async function addColorToGridDisplay(color) {
 function editToggleFn() {
   const element = document.getElementById("editToggle");
   if (editToggle) {
+    //toggle -> off
     // display-mode
     editToggle = false;
-    element.style.backgroundColor = "red";
+    element.classList.remove("is-active");
 
     document.getElementById("editBtns").classList.add("hidden-btn-menus");
     document.getElementById("editBtns").classList.remove("btn-menus");
     document.getElementById("displayBtns").classList.remove("hidden-btn-menus");
     document.getElementById("displayBtns").classList.add("btn-menus");
-    document.getElementById("modeLable").innerText = "presentieren";
+    document.getElementById("modeLable").innerText = "PRÄSENTIEREN";
 
     removeMoveTemplate();
     const elements = document.querySelectorAll(".grid-box-content");
@@ -112,15 +113,16 @@ function editToggleFn() {
       element.draggable = false;
     });
   } else {
+    //toggle -> on
     // edit-mode
     editToggle = true;
-    element.style.backgroundColor = "green";
+    element.classList.add("is-active");
 
     document.getElementById("displayBtns").classList.add("hidden-btn-menus");
     document.getElementById("displayBtns").classList.remove("btn-menus");
     document.getElementById("editBtns").classList.remove("hidden-btn-menus");
     document.getElementById("editBtns").classList.add("btn-menus");
-    document.getElementById("modeLable").innerText = "bearbeiten";
+    document.getElementById("modeLable").innerText = "BEARBEITEN";
 
     const elements = document.querySelectorAll(".grid-box-content");
     elements.forEach((element) => {
@@ -135,20 +137,39 @@ function editToggleFn() {
 }
 
 function transitionToggleFn() {
-  if(!editToggle)
-  {
+  if (editToggle) {
     return;
   }
   const button = document.getElementById("transitionToggle");
   const text = document.getElementById("transitionLable");
   if (transitionToggle) {
+    // toggle -> off
     transitionToggle = false;
-    button.style.backgroundColor = "red";
+    button.classList.add("is-active");
     text.innerText = "CUT";
   } else {
+    // toggle -> on
     transitionToggle = true;
-    button.style.backgroundColor = "green";
+    button.classList.remove("is-active");
     text.innerText = "FADE";
+  }
+}
+
+function assetToggleFn() {
+  if (assetToggle) {
+    //toggle -> open
+    assetToggle = false;
+    document.getElementById("box-left").style.display = "none";
+    document.getElementById("assetIconOpen").style.display = "none";
+    document.getElementById("assetIconClose").style.display = "block";
+    document.getElementById("assetToggle").classList.add("is-active");
+  } else {
+    //toggle -> close
+    assetToggle = true;
+    document.getElementById("box-left").style.display = "block";
+    document.getElementById("assetIconClose").style.display = "none";
+    document.getElementById("assetIconOpen").style.display = "block";
+    document.getElementById("assetToggle").classList.remove("is-active");
   }
 }
 
@@ -177,13 +198,7 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   document.getElementById("assetToggle").addEventListener("click", () => {
-    if (assetToggle) {
-      assetToggle = false;
-      document.getElementById("box-left").style.display = "none";
-    } else {
-      assetToggle = true;
-      document.getElementById("box-left").style.display = "block";
-    }
+    assetToggleFn();
   });
 
   document.getElementById("editToggle").addEventListener("click", (event) => {
@@ -246,7 +261,16 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    if(document.querySelectorAll(".editSelected")[0] == undefined)
+    {
+      return;
+    }
+
     const name = prompt("Umbenennen zu:");
+
+    if (name == "" || name == undefined) {
+      return;
+    }
 
     const child = document.querySelector(".editSelected");
     const parentElement = child.parentElement;
@@ -264,28 +288,28 @@ window.addEventListener("DOMContentLoaded", () => {
     .getElementById("visibilityToggle")
     .addEventListener("click", async (event) => {
       if (visibilityToggle) {
+        //toggle -> off
         visibilityToggle = false;
-        event.currentTarget.style.backgroundColor = "red";
+        event.currentTarget.classList.add("is-active");
         await invoke("hide_sec_window");
       } else {
+        //toggle -> on
         visibilityToggle = true;
-        event.currentTarget.style.backgroundColor = "green";
+        event.currentTarget.classList.remove("is-active");
         await invoke("show_sec_window");
       }
     });
 
-  document
-    .getElementById("transitionToggle")
-    .addEventListener("click", () => {
-      transitionToggleFn();
-    });
+  document.getElementById("transitionToggle").addEventListener("click", () => {
+    transitionToggleFn();
+  });
 
-  document.getElementById("editToggle").style.backgroundColor = "red";
-  document.getElementById("transitionToggle").style.backgroundColor = "green";
-  document.getElementById("visibilityToggle").style.backgroundColor = "green";
+  document.getElementById("closeBtn").addEventListener("click", async () => {
+    await invoke("close_main_window");
+  });
 });
 
-window.addEventListener('contextmenu', (e) => e.preventDefault());
+window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 window.addEventListener("keydown", (event) => {
   // event.preventDefault(); //! Später wieder aktivieren!
@@ -320,6 +344,9 @@ window.addEventListener("keydown", (event) => {
       break;
     case "t":
       transitionToggleFn();
+      break;
+    case "f":
+      assetToggleFn();
       break;
   }
 });

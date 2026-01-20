@@ -67,3 +67,9 @@ window.addEventListener("DOMContentLoaded", () => {
       await appWindow.close();
     });
 });
+
+window.addEventListener("contextmenu", (e) => e.preventDefault());
+
+window.addEventListener("keydown",(event)=>{
+  event.preventDefault();
+})

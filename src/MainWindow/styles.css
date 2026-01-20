@@ -1,9 +1,22 @@
+/* variables */
+:root {
+  --color-text: #e3e3e3;
+  --color-background: #131314;
+  --color-background-contrast: #1e1f20;
+  --color-primary: #1976f0;
+  --color-secondary: #8f7fff;
+  --color-accent: #d01941;
+}
+
 body,
 html {
   margin: 0;
   height: 100%;
   user-select: none;
   overflow: hidden;
+  font-family:
+    "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .layout-container {
@@ -14,8 +27,8 @@ html {
 
 .top-box {
   height: 10%;
-  background-color: rgb(69, 69, 69);
-  color: white;
+  background-color: var(--color-background);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,14 +36,53 @@ html {
 }
 
 #mainBtns {
-  background-color: rgb(69, 69, 69);
+  background-color: var(--color-background);
+  color: var(--color-text);
   width: 100%;
   height: 100%;
+
   flex: 3;
-} 
+  display: flex;
+  align-items: center;
+  padding: 0 5%;
+  gap: 2%;
+  box-sizing: border-box;
+}
+
+.btns {
+  color: var(--color-text);
+  background-color: var(--color-background-contrast);
+  width: 10%;
+  transition: 0.5s;
+}
+
+.btns.is-active {
+  color: var(--color-text);
+  background-color: var(--color-secondary);
+  transition: 0.5s;
+}
+
+.btns.is-active:hover {
+  background-color: var(--color-background-contrast);
+  color: var(--color-accent);
+}
+
+.btns.is-active:active {
+  background-color: var(--color-secondary);
+}
+
+.btns:hover {
+  /* background-color: var(--color-accent); */
+  color: var(--color-accent);
+}
+
+.btns:active {
+  background-color: var(--color-secondary);
+}
 
 .btn-menus {
-  background-color: rgb(118, 118, 118);
+  background-color: var(--color-background);
+  color: var(--color-text);
   width: 100%;
   height: 100%;
   flex: 7;
@@ -41,6 +93,37 @@ html {
   padding: 0 5%;
   gap: 2%;
   box-sizing: border-box;
+}
+
+.setting-btns {
+  color: var(--color-text);
+  background-color: var(--color-background-contrast);
+  transition: 0.5s;
+  width: 10%;
+}
+
+.setting-btns:hover {
+  /* background-color: var(--color-accent); */
+  color: var(--color-accent);
+}
+
+.setting-btns:active {
+  background-color: var(--color-secondary);
+}
+
+.setting-btns.is-active {
+  color: var(--color-text);
+  background-color: var(--color-secondary);
+  transition: 0.5s;
+}
+
+.setting-btns.is-active:hover {
+  background-color: var(--color-background-contrast);
+  color: var(--color-accent);
+}
+
+.setting-btns.is-active:active {
+  background-color: var(--color-secondary);
 }
 
 .hidden-btn-menus {
@@ -60,13 +143,13 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgb(108, 108, 108);
+  border: 1px solid var(--color-background-contrast);
   flex: 1;
 }
 /* left */
 .box:nth-child(1) {
-  background-color: #181818;
-  color: white;
+  background-color: var(--color-background);
+  color: var(--color-text);
   flex: 3;
   flex-direction: column;
   align-items: stretch;
@@ -74,8 +157,8 @@ html {
 }
 /* right */
 .box:nth-child(2) {
-  background-color: #181818;
-  color: white;
+  background-color: var(--color-background);
+  color: var(--color-text);
   flex: 7;
   flex-direction: column;
   align-items: stretch;
@@ -83,10 +166,14 @@ html {
 }
 
 #leftUpperContainer {
-  background-color: red;
+  background-color: var(--color-background);
   width: 100%;
   height: 5%;
   display: flex;
+  align-items: center;
+  padding: 0 5%;
+  gap: 2%;
+  box-sizing: border-box;
 }
 
 .grid-container {
@@ -115,8 +202,8 @@ html {
   aspect-ratio: 1 / 1;
   grid-column: span 2;
 
-  background-color: #4e2232;
-  color: white;
+  background-color: var(--color-background-contrast);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -141,8 +228,8 @@ html {
 
 .grid-box-content {
   aspect-ratio: 1 / 1;
-  background-color: #193639;
-  color: white;
+  background-color: var(--color-secondary);
+  color: var(--color-text);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -160,15 +247,15 @@ html {
 }
 
 .grid-box-content.displaySelected {
-  background-color: #34dbbfff;
+  background-color: var(--color-accent);
 }
 
 .grid-box-content.playing {
-  background-color: #9534dbff;
+  background-color: var(--color-primary);
 }
 
 .grid-box-content.editSelected {
-  background-color: #34dbbfff;
+  background-color: var(--color-accent);
 }
 
 .grid-box-content span,
@@ -203,7 +290,7 @@ html {
   /* Keine Grid-Regeln mehr! */
   flex: 1; /* Nimmt 1 Teil des Platzes */
   height: auto;
-  background-color: #40341c;
+  background-color: var(--color-background-contrast);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -226,7 +313,7 @@ html {
   /* Keine Grid-Regeln mehr! */
   flex: 2; /* Nimmt 2 Teile des Platzes (doppelt so breit wie grün) */
   aspect-ratio: 1 / 1; /* Erzeugt die quadratische Höhe */
-  background-color: #272727;
+  background-color: var(--color-background-contrast);
   border-radius: 8px;
   display: flex;
   align-items: center;

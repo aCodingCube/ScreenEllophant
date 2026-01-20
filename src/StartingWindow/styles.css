@@ -1,3 +1,15 @@
+/* variables */
+:root {
+  --color-text: #e3e3e3;
+  --color-background: #131314;
+  --color-background-contrast: #1e1f20;
+  --color-primary: #1976f0;
+  --color-secondary: #8f7fff;
+  --color-accent: #d01941;
+}
+
 html, body{
+    background-color: var(--color-background);
+    color: var(--color-text);
     user-select: none;
 }

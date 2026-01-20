@@ -75,6 +75,13 @@ async fn open_main_window(app: AppHandle) {
     }
 }
 
+#[tauri::command]
+async fn close_main_window(app: AppHandle) {
+    if let Some(window) = app.get_webview_window("main") {
+        window.close().unwrap();
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -98,6 +105,7 @@ pub fn run() {
             close_sec_window,
             hide_sec_window,
             show_sec_window,
+            close_main_window,
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { .. } = event {

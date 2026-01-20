@@ -216,8 +216,11 @@ function checkAndSwap() {
 
 window.addEventListener("DOMContentLoaded", add_eventListener);
 
+window.addEventListener("contextmenu", (e) => e.preventDefault());
+
 function add_eventListener() {
   window.addEventListener("keydown", async (event) => {
+    event.preventDefault();
     if (event.key == "Escape") {
       await appWindow.close();
     }
