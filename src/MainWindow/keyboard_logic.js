@@ -19,6 +19,11 @@ let selectedIndex = 0;
 function nextElementLeft() {
   const newIndex = selectedIndex - 1;
   const newElement = document.getElementById(layout[newIndex]);
+  newElement.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "nearest"
+  });
   return newElement;
 }
 
@@ -56,6 +61,11 @@ export function keyLeftArrow() {
 function nextElementRight() {
   const newIndex = selectedIndex + 1;
   const newElement = document.getElementById(layout[newIndex]);
+  newElement.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "nearest"
+  });
   return newElement;
 }
 

@@ -23,6 +23,7 @@ html {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overscroll-behavior: contain;
 }
 
 .top-box {
@@ -196,6 +197,7 @@ html {
   min-height: 0;
   /* grid-auto-flow: dense; */
   grid-auto-flow: row;
+  overscroll-behavior: contain;
 }
 
 .grid-box {
@@ -228,7 +230,7 @@ html {
 
 .grid-box-content {
   aspect-ratio: 1 / 1;
-  background-color: var(--color-secondary);
+  background-color: var(--color-background-contrast);
   color: var(--color-text);
   display: flex;
   align-items: center;
