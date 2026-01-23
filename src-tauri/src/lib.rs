@@ -35,14 +35,19 @@ async fn open_window(app: AppHandle) {
 
     if let Some(monitor) = monitors.get(1) {
         window.set_fullscreen(true).unwrap();
-    }
-    else
-    {
+    } else {
         window.set_fullscreen(false).unwrap();
     }
 
     window.set_cursor_visible(false).unwrap();
     window.set_always_on_top(true).unwrap();
+}
+
+#[tauri::command]
+async fn close_start_window(app: AppHandle) {
+    if let Some(window) = app.get_webview_window("starting-window") {
+        window.close().unwrap();
+    }
 }
 
 #[tauri::command]
@@ -61,7 +66,7 @@ async fn hide_sec_window(app: AppHandle) {
 
 #[tauri::command]
 async fn show_sec_window(app: AppHandle) {
-    if let Some(window) = app.get_webview_window("second-window"){
+    if let Some(window) = app.get_webview_window("second-window") {
         window.show().unwrap();
     }
 }
@@ -106,6 +111,7 @@ pub fn run() {
             hide_sec_window,
             show_sec_window,
             close_main_window,
+            close_start_window,
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { .. } = event {

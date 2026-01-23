@@ -261,8 +261,7 @@ window.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    if(document.querySelectorAll(".editSelected")[0] == undefined)
-    {
+    if (document.querySelectorAll(".editSelected")[0] == undefined) {
       return;
     }
 
@@ -312,7 +311,7 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 window.addEventListener("keydown", (event) => {
-  // event.preventDefault(); //! Später wieder aktivieren!
+  event.preventDefault();
   if (event.repeat) {
     return;
   }

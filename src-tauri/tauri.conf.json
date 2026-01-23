@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "eprojections",
+  "productName": "Screen Ellophant",
   "version": "0.1.0",
-  "identifier": "com.lorenz.eprojections",
+  "identifier": "com.lorenz.screen-ellophant",
   "build": {
     "frontendDist": "../src"
   },
@@ -15,13 +15,15 @@
         "url": "StartingWindow/index.html",
         "visible": true,
         "maximized": false,
-        "width": 800,
-        "height": 600,
-        "theme": "Dark"
+        "width": 600,
+        "height": 300,
+        "theme": "Dark",
+        "decorations": false,
+        "center": true
       },
       {
         "label": "main",
-        "title": "EProjections",
+        "title": "Screen Ellophant",
         "visible": false,
         "width": 800,
         "height": 600,
