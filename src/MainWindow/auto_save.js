@@ -2,6 +2,8 @@ const { invoke } = window.__TAURI__.core;
 const { exists } = window.__TAURI__.fs;
 const { listen } = window.__TAURI__.event;
 
+let error = false;
+
 listen("load_save", () => {
   load_save();
 });
@@ -54,6 +56,7 @@ export async function auto_save() {
 }
 
 export async function load_save() {
+  error = false;
   let result = await invoke("load_layout");
 
   if (result[0] == "") {
@@ -86,13 +89,19 @@ export async function load_save() {
       const isValid = await isSrcValid(url);
       if (!isValid) {
         name = "Fehlende Datei!";
-        alert('Datei "' + url + '" wurde nicht gefunden!');
+        error = true;
         url = "missing url";
       }
       addAssetsToTemplate(name, url, img_src, element);
     }
     id++;
   }
+
+  if(error)
+  {
+    alert("Dateien wurden nicht gefunden!");
+  }
+
 }
 
 async function isSrcValid(src) {
