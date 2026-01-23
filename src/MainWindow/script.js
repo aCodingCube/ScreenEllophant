@@ -161,14 +161,14 @@ function assetToggleFn() {
     assetToggle = false;
     document.getElementById("box-left").style.display = "none";
     document.getElementById("assetIconOpen").style.display = "none";
-    document.getElementById("assetIconClose").style.display = "block";
+    document.getElementById("assetIconClose").style.display = "inline-flex";
     document.getElementById("assetToggle").classList.add("is-active");
   } else {
     //toggle -> close
     assetToggle = true;
     document.getElementById("box-left").style.display = "block";
     document.getElementById("assetIconClose").style.display = "none";
-    document.getElementById("assetIconOpen").style.display = "block";
+    document.getElementById("assetIconOpen").style.display = "inline-flex";
     document.getElementById("assetToggle").classList.remove("is-active");
   }
 }
