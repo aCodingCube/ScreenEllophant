@@ -83,7 +83,10 @@ pub async fn create_new_project(
     file_path.push(SAVE_FILE);
     fs::write(&file_path, "{}").map_err(|e: std::io::Error| e.to_string())?;
 
-    Ok(())
+    match state.path.set(new_path) {
+        Ok(_) => Ok(()),
+        Err(_) => Err("Der Pfad wurde bereits gesetzt und kann nicht geändert werden.".to_string()),
+    }
 }
 
 // layout ist ein Array mit vielen "MediaElemen"-Elementen,

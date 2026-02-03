@@ -310,7 +310,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("contextmenu", (e) => e.preventDefault());
 
-window.addEventListener("keydown", (event) => {
+window.addEventListener("keydown", async (event) => {
   event.preventDefault();
   if (event.repeat) {
     return;
@@ -346,6 +346,14 @@ window.addEventListener("keydown", (event) => {
       break;
     case "f":
       assetToggleFn();
+      break;
+    case "r":
+      document.getElementById("container-left").replaceChildren();
+      const result = await invoke("load_asset_names");
+
+      result.forEach((name) => {
+        addAssetsToGridDisplay(name);
+      });
       break;
   }
 });
