@@ -1,11 +1,11 @@
 {
-  "version": "1.1.1",
+  "version": "1.1.2",
   "notes": "Und ein weiteres Update... :)",
   "pub_date": "2026-04-28T12:37:00Z",
   "platforms": {
     "windows-x86_64": {
       "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUb2YvSVo1cTA2YnhKRUNFTWU0MTZkdzJpbFdiWkFMUmRiQUVEMUVLQzNmSXpoQ3RpWXNib25FVXo0bzkxbWlHQ3c1UkFseG5qUkt0bTJUalRKV2dxN2kvYVI3T2dvelFVPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzg4MDgxMDE4CWZpbGU6U2NyZWVuLUVsbG9waGFudF8xLjAuM194NjRfZW4tVVMubXNpCmR3OWVjNUtYNFVWN2R3RDRYYmViVyt2OVR4emVGVWc5em9uTjM4L0dla0xYNDloNkpqMzBHbk5EWFV2aUd2RWVHbHRuL3BQblJTNGNEcTZCd09iYkRRPT0K",
-      "url": "https://github.com/EllophantLabs/EProjections/releases/download/v1.1.1/Screen-Ellophant_1.1.1_x64_en-US.msi"
+      "url": "https://github.com/EllophantLabs/EProjections/releases/download/v1.1.2/Screen-Ellophant_1.1.2_x64_en-US.msi"
     }
   }
 }
