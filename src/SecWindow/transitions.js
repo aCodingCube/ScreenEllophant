@@ -121,12 +121,21 @@ export function blackoutTransition(transition) {
         console.error("no blackout slot! transitions.ts");
         return;
     }
-    if (blackoutToggle) {
+    if (blackoutToggle) { // fade blackout out!
+        // const activeSlot = document.querySelector("#visible");
+        // if (activeSlot && activeSlot.firstElementChild?.firstElementChild?.tagName == "VIDEO") {
+        //     const video = activeSlot.firstElementChild.firstElementChild;
+        //     if (video instanceof HTMLVideoElement) {
+        //         const fadeSeconds: number = 1;
+        //         const currentTime: number = audioCtx.currentTime;
+        //     }
+        // }
         document.documentElement.style.setProperty('--blackout-fade', `${transition * 1000}ms`);
         slot.classList.remove("blackoutVisible");
         blackoutToggle = false;
         return;
     }
+    // fade blackout in
     document.documentElement.style.setProperty('--blackout-fade', `${transition * 1000}ms`);
     slot.classList.add("blackoutVisible");
     blackoutToggle = true;

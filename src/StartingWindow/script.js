@@ -73,7 +73,7 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 window.addEventListener("keydown", (event) => {
-  // event.preventDefault();
+  event.preventDefault();
   switch (event.key) {
     case "Escape":
       invoke("close_start_window");
