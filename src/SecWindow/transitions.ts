@@ -1,5 +1,13 @@
+//* audio Setup
+const audioCtx: AudioContext = new AudioContext();
+const audioSources: MediaElementAudioSourceNode[] = [];
+const gainNodes = [audioCtx.createGain(), audioCtx.createGain()];
+gainNodes[0].connect(audioCtx.destination);
+gainNodes[1].connect(audioCtx.destination);
+let audioSrcCounter: number = 0;
+
+//* other variables
 let blackoutToggle: boolean = false;
-let transitionToggle: boolean = true; //Todo update toggle!
 
 export function preloadSlot(isVideo: boolean, url: string, isLooped: boolean, isColor: boolean): void {
     const preloadSlot = document.querySelector(".preload");
@@ -22,6 +30,12 @@ export function preloadSlot(isVideo: boolean, url: string, isLooped: boolean, is
         video.preload = "auto";
         video.loop = isLooped;
         video.crossOrigin = "anonymous";
+        video.dataset.counter = audioSrcCounter.toString(); // ts typesafe alternative to video.counter ! type = String !
+
+        // audio setup
+        audioSources[audioSrcCounter] = audioCtx.createMediaElementSource(video);
+        audioSources[audioSrcCounter].connect(gainNodes[audioSrcCounter]);
+        audioSrcCounter = audioSrcCounter == 0 ? 1 : 0;
 
         bg.appendChild(video);
         preloadSlot.appendChild(bg);
@@ -50,6 +64,8 @@ export function preloadSlot(isVideo: boolean, url: string, isLooped: boolean, is
 
     bg.appendChild(img);
     preloadSlot.appendChild(bg);
+
+    return;
 }
 
 export function mainTransition(transitionDuration: number, isLooped: boolean): void {
@@ -88,11 +104,38 @@ export function mainTransition(transitionDuration: number, isLooped: boolean): v
     newSlot.classList.remove("preload");
     newSlot.classList.add("visible");
 
+    //* old video fade audio out
+    if (oldSlot.firstElementChild?.firstElementChild?.tagName == "VIDEO") {
+        const video = oldSlot.firstElementChild.firstElementChild;
+        if (!(video instanceof HTMLVideoElement)) {
+            return;
+        }
+
+        const fadeSeconds = Number((transitionDuration / 1000).toFixed(2));
+        const currentTime: number = audioCtx.currentTime;
+        if (fadeSeconds > 0) {
+            gainNodes[Number(video.dataset.counter)].gain.setValueAtTime(1, currentTime);
+            gainNodes[Number(video.dataset.counter)].gain.linearRampToValueAtTime(0, currentTime + fadeSeconds);
+            setTimeout(() => {
+                audioSources[Number(video.dataset.counter)].disconnect();
+            }, transitionDuration);
+        }
+        else if (fadeSeconds == 0) {
+            gainNodes[Number(video.dataset.counter)].gain.setValueAtTime(0, currentTime);
+            audioSources[Number(video.dataset.counter)].disconnect();
+        }
+    }
+
     if (newSlot.firstElementChild?.firstElementChild?.tagName == "VIDEO") { // if video unmute and play video
         const video = newSlot.firstElementChild.firstElementChild;
         if (!(video instanceof HTMLVideoElement)) {
             return;
         }
+
+        //* video setup new video
+        const currentTime: number = audioCtx.currentTime;
+        gainNodes[Number(video.dataset.counter)].gain.setValueAtTime(1, currentTime);
+
         video.play();
         video.muted = false;
         video.loop = isLooped;
